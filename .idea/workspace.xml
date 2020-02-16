@@ -10,12 +10,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77368870-4045-496a-9737-2c7f83086a16" name="Default Changelist" comment="initial implementation">
-      <change beforePath="$PROJECT_DIR$/lib/activecube.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/activecube.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/activecube/active_record_extension.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/activecube/active_record_extension.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/activecube/clickhouse/metric/count.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/activecube/metric/count.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/activecube/clickhouse/metric/sum.rb" beforeDir="false" afterPath="$PROJECT_DIR$/lib/activecube/metric/sum.rb" afterDir="false" />
-    </list>
+    <list default="true" id="77368870-4045-496a-9737-2c7f83086a16" name="Default Changelist" comment="initial implementation" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,7 +57,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1581885096407</updated>
-      <workItem from="1581885099890" duration="2955000" />
+      <workItem from="1581885099890" duration="3547000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1581885128091</created>
@@ -85,7 +80,21 @@
       <option name="project" value="LOCAL" />
       <updated>1581886068687</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="initial implementation">
+      <created>1581888304903</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1581888304904</updated>
+    </task>
+    <task id="LOCAL-00005" summary="initial implementation">
+      <created>1581888510999</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1581888510999</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -108,26 +117,26 @@
     <option name="LAST_COMMIT_MESSAGE" value="initial implementation" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1207" height="234" key="GridCell.Tab.0.bottom" timestamp="1581886154408">
+    <state width="1207" height="48" key="GridCell.Tab.0.bottom" timestamp="1581888894138">
       <screen x="0" y="23" width="1440" height="786" />
     </state>
-    <state width="1207" height="234" key="GridCell.Tab.0.bottom/0.23.1440.786@0.23.1440.786" timestamp="1581886154408" />
-    <state width="1207" height="234" key="GridCell.Tab.0.center" timestamp="1581886154407">
+    <state width="1207" height="48" key="GridCell.Tab.0.bottom/0.23.1440.786@0.23.1440.786" timestamp="1581888894138" />
+    <state width="1207" height="48" key="GridCell.Tab.0.center" timestamp="1581888894135">
       <screen x="0" y="23" width="1440" height="786" />
     </state>
-    <state width="1207" height="234" key="GridCell.Tab.0.center/0.23.1440.786@0.23.1440.786" timestamp="1581886154407" />
-    <state width="1207" height="234" key="GridCell.Tab.0.left" timestamp="1581886154406">
+    <state width="1207" height="48" key="GridCell.Tab.0.center/0.23.1440.786@0.23.1440.786" timestamp="1581888894135" />
+    <state width="1207" height="48" key="GridCell.Tab.0.left" timestamp="1581888894133">
       <screen x="0" y="23" width="1440" height="786" />
     </state>
-    <state width="1207" height="234" key="GridCell.Tab.0.left/0.23.1440.786@0.23.1440.786" timestamp="1581886154406" />
-    <state width="1207" height="234" key="GridCell.Tab.0.right" timestamp="1581886154407">
+    <state width="1207" height="48" key="GridCell.Tab.0.left/0.23.1440.786@0.23.1440.786" timestamp="1581888894133" />
+    <state width="1207" height="48" key="GridCell.Tab.0.right" timestamp="1581888894136">
       <screen x="0" y="23" width="1440" height="786" />
     </state>
-    <state width="1207" height="234" key="GridCell.Tab.0.right/0.23.1440.786@0.23.1440.786" timestamp="1581886154407" />
-    <state x="537" y="156" key="Vcs.Push.Dialog.v2" timestamp="1581888338752">
+    <state width="1207" height="48" key="GridCell.Tab.0.right/0.23.1440.786@0.23.1440.786" timestamp="1581888894136" />
+    <state x="537" y="156" key="Vcs.Push.Dialog.v2" timestamp="1581888518182">
       <screen x="0" y="23" width="1440" height="786" />
     </state>
-    <state x="537" y="156" key="Vcs.Push.Dialog.v2/0.23.1440.786@0.23.1440.786" timestamp="1581888338752" />
+    <state x="537" y="156" key="Vcs.Push.Dialog.v2/0.23.1440.786@0.23.1440.786" timestamp="1581888518182" />
     <state x="352" y="201" width="819" height="558" key="find.popup" timestamp="1581885294826">
       <screen x="0" y="23" width="1440" height="786" />
     </state>

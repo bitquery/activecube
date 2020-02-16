@@ -1,8 +1,25 @@
-# Activecube
+# Activecube: Multi-Dimensional Queries with Rails
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/activecube`. To experiment with that code, run `bin/console` for an interactive prompt.
+Activecube is the library to make multi-dimensional queries to data warehouse, such as:
 
-TODO: Delete this and the text above, and describe your gem
+```sql
+
+Cube.slice(
+    date: cube.dimensions[:date][:date].format('%Y-%m'),
+    currency: cube.dimensions[:currency][:symbol]
+).measure(:count).
+when(cube.selectors[:currency].in('USD','EUR').to_sql
+```
+
+Cube, dimensions, metrics and selectors are defined in the Model, similary to
+ActiveRecord.
+
+Activecube uses Rails ActiveRecord in implementation. 
+
+In particular, you have to define all tables, used in
+Activecube, as ActiveRecord tables.
+
+ 
 
 ## Installation
 
@@ -22,7 +39,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+TBD
 
 ## Development
 

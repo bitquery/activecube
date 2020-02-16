@@ -1,4 +1,4 @@
-module Activecube::Clickhouse::Metric
+module Activecube::Common
 
   class Sum < Activecube::Metric
 

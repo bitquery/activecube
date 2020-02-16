@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1Xu9Qappwp8FcqKJZrxzkXK80UI" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1207" height="201" key="GridCell.Tab.0.bottom" timestamp="1581885116972">
+      <screen x="0" y="23" width="1440" height="786" />
+    </state>
+    <state width="1207" height="201" key="GridCell.Tab.0.bottom/0.23.1440.786@0.23.1440.786" timestamp="1581885116972" />
+    <state width="1207" height="201" key="GridCell.Tab.0.center" timestamp="1581885116972">
+      <screen x="0" y="23" width="1440" height="786" />
+    </state>
+    <state width="1207" height="201" key="GridCell.Tab.0.center/0.23.1440.786@0.23.1440.786" timestamp="1581885116972" />
+    <state width="1207" height="201" key="GridCell.Tab.0.left" timestamp="1581885116971">
+      <screen x="0" y="23" width="1440" height="786" />
+    </state>
+    <state width="1207" height="201" key="GridCell.Tab.0.left/0.23.1440.786@0.23.1440.786" timestamp="1581885116971" />
+    <state width="1207" height="201" key="GridCell.Tab.0.right" timestamp="1581885116972">
+      <screen x="0" y="23" width="1440" height="786" />
+    </state>
+    <state width="1207" height="201" key="GridCell.Tab.0.right/0.23.1440.786@0.23.1440.786" timestamp="1581885116972" />
+  </component>
+</project>

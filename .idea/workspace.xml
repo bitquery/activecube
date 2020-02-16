@@ -6,6 +6,7 @@
   <component name="ProjectId" id="1Xu9Qappwp8FcqKJZrxzkXK80UI" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/activecube" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
@@ -39,5 +40,9 @@
       <screen x="0" y="23" width="1440" height="786" />
     </state>
     <state width="1207" height="201" key="GridCell.Tab.0.right/0.23.1440.786@0.23.1440.786" timestamp="1581885116972" />
+    <state x="352" y="201" width="819" height="558" key="find.popup" timestamp="1581885294826">
+      <screen x="0" y="23" width="1440" height="786" />
+    </state>
+    <state x="352" y="201" width="819" height="558" key="find.popup/0.23.1440.786@0.23.1440.786" timestamp="1581885294826" />
   </component>
 </project>

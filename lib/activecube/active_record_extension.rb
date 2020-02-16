@@ -15,6 +15,3 @@ module Activecube::ActiveRecordExtension
   end
 
 end
-
-# include the extension
-ActiveRecord::Base.send(:include, Activecube::ActiveRecordExtension)

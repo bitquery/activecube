@@ -1,3 +1,14 @@
+require 'activecube/query/chain_appender'
+require 'activecube/query/item'
+require 'activecube/query/limit'
+require 'activecube/query/measure'
+require 'activecube/query/or_selector'
+require 'activecube/query/ordering'
+require 'activecube/query/selector'
+require 'activecube/query/slice'
+
+require 'activecube/processor/composer'
+
 module Activecube::Query
   class CubeQuery
 

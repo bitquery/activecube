@@ -1,8 +1,15 @@
 require "activecube/version"
 require 'activecube/active_record_extension'
 
+require 'activecube/base'
+require 'activecube/dimension'
+require 'activecube/metric'
+require 'activecube/selector'
+
+require 'activecube/common/count'
+require 'activecube/common/sum'
+
 module Activecube
-  class Error < StandardError; end
 
   # include the extension
   ActiveRecord::Base.send(:include, Activecube::ActiveRecordExtension)

@@ -1,3 +1,5 @@
+require 'activecube/dimension_definition_methods'
+
 module Activecube
   class Selector
     extend DimensionDefinitionMethods

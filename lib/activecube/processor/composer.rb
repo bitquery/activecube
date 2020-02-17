@@ -1,3 +1,8 @@
+require 'activecube/processor/index'
+require 'activecube/processor/measure_tables'
+require 'activecube/processor/optimizer'
+require 'activecube/processor/table'
+
 module Activecube::Processor
   class Composer
 

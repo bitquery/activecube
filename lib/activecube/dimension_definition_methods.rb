@@ -1,3 +1,6 @@
+require 'activecube/cube_definition'
+require 'activecube/field'
+
 module Activecube
   module DimensionDefinitionMethods
 

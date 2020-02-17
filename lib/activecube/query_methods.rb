@@ -1,3 +1,5 @@
+require 'activecube/query/cube_query'
+
 module Activecube
   module QueryMethods
 

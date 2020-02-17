@@ -1,3 +1,5 @@
+require 'activecube/query/selector'
+
 module Activecube
   module Query
     class OrSelector < Selector

@@ -176,7 +176,7 @@ The optimization on step #3 try to minimize the total cost of execution:
 
 where 
 
-![Formula cost](https://latex.codecogs.com/png.download?cost%28metric%2Ctable%29%20%3D%201%20/%20%281%20+%20cardinality%28metric%2C%20table%29%29)
+![Formula cost](https://latex.codecogs.com/png.latex?\inline&space;cost(metric,table)&space;=&space;1&space;/&space;(1&space;&plus;&space;cardinality(metric,&space;table)))
 
 Optimization is done using the algorithm, which checks possible combinations of metrics and tables.
 

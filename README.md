@@ -172,7 +172,7 @@ the same sequence of operations happen:
 
 The optimization on step #3 try to minimize the total cost of execution:
 
-![Formula min max](https://latex.codecogs.com/png.download?min%28%5Csum_%7Btables%7Dmax_%7Bmetrics%7D%28cost%29%29%29)
+![Formula min max](https://latex.codecogs.com/png.latex?min(\sum_{tables}max_{metrics}(cost))))
 
 where 
 

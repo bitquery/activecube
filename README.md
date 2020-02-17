@@ -172,12 +172,11 @@ the same sequence of operations happen:
 
 The optimization on step #3 try to minimize the total cost of execution:
 
-
-![Formula min max](https://latex.codecogs.com/gif.download?min%28%5Csum_%7Btables%7Dmax_%7Bmetrics%7D%28cost%29%29%29)
+![Formula min max](https://latex.codecogs.com/png.download?min%28%5Csum_%7Btables%7Dmax_%7Bmetrics%7D%28cost%29%29%29)
 
 where 
 
-![Formula cost](https://latex.codecogs.com/gif.download?cost%28metric%2Ctable%29%20%3D%201%20/%20%281%20+%20cardinality%28metric%2C%20table%29%29)
+![Formula cost](https://latex.codecogs.com/png.download?cost%28metric%2Ctable%29%20%3D%201%20/%20%281%20+%20cardinality%28metric%2C%20table%29%29)
 
 Optimization is done using the algorithm, which checks possible combinations of metrics and tables.
 

@@ -80,5 +80,3 @@ module Activecube::Query
 
   end
 end
-
-Arel::Nodes::SqlLiteral

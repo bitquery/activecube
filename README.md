@@ -157,6 +157,29 @@ ApplicationRecord.connected_to(database: :data_warehouse) do
 
 will query using data_warehouse configuraton.
 
+## How it works
+
+When you construct and execute cube query with any outcome ( sql, Arel query or ResultSet),
+the same sequence of operations happen:
+
+1) Cube is collecting the query into a set of objects from the chain method call;
+2) Query is matched against the physical tables, the tables are selected that can serve the query or its part. For example, one table can provide one set of metrics, and the other can provide remaining;
+3) If possible, the variant is selected from all possible options, which uses indexes with the most cardinality
+4) Query is constructed using Arel SQL engine ( included in ActiveRecord ) using selected tables, and possibly joins
+5) If requested, the query is converted to sql ( using Arel visitor ) or executed with database connection
+
+## Optimization
+
+The optimization on step #3 try to minimize the total cost of execution:
+
+<img src='https://latex.codecogs.com/gif.download?min%28%5Csum_%7Btables%7Dmax_%7Bmetrics%7D%28cost%29%29%29'></img>
+
+where 
+
+<img src='https://latex.codecogs.com/gif.download?cost%28metric%2Ctable%29%20%3D%201%20/%20%281%20+%20cardinality%28metric%2C%20table%29%29'></img>
+
+Optimization is done using the algorithm, which checks possible combinations of metrics and tables.
+
 
 ## Development
 

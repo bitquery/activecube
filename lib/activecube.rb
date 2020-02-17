@@ -9,6 +9,8 @@ require 'activecube/selector'
 require 'activecube/common/count'
 require 'activecube/common/sum'
 
+require 'active_record'
+
 module Activecube
 
   # include the extension

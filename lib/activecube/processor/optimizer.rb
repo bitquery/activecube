@@ -8,11 +8,12 @@ module Activecube::Processor
     attr_reader :tables_count, :metrics_count, :cost_matrix
     def initialize cost_matrix
       @cost_matrix = cost_matrix
+      @cache = ActiveSupport::Cache::MemoryStore.new
     end
 
     def optimize
 
-      Rails.cache.fetch(cost_matrix, expires_in: 12.hours) do
+      @cache.fetch(cost_matrix, expires_in: 12.hours) do
 
         @tables_count = cost_matrix.map(&:count).max
         @metrics_count = cost_matrix.count

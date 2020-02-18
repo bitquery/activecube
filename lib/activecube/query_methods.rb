@@ -9,9 +9,9 @@ module Activecube
       end
     end
 
-    def connected_to database: nil, role: nil, prevent_writes: false, &block
+    def connected_to database: nil, role: nil, &block
       raise ArgumentError, "Must pass block to method" unless block_given?
-      super_model.connected_to(database: database, role: role, prevent_writes: prevent_writes) do
+      super_model.connected_to(database: database, role: role) do
         block.call self
       end
     end

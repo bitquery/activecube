@@ -140,7 +140,10 @@ After the query contructed, the following methods can be applied:
 - **to_query** to generate Arel query
 - **query** to execute query and return ResultSet
 
-Note, that you can control the connection used to construct and execute query by 
+### Managing Connections
+
+
+You can control the connection used to construct and execute query by 
 ActiveRecord standard API:
 
 ```ruby

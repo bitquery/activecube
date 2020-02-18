@@ -2,8 +2,7 @@
 
 Activecube is the library to make multi-dimensional queries to data warehouse, such as:
 
-```sql
-
+```ruby
 Cube.slice(
     date: cube.dimensions[:date][:date].format('%Y-%m'),
     currency: cube.dimensions[:currency][:symbol]
@@ -145,7 +144,6 @@ Note, that you can control the connection used to construct and execute query by
 ActiveRecord standard API:
 
 ```ruby
-
 ApplicationRecord.connected_to(database: :data_warehouse) do
       cube = My::TransfersCube
       cube.slice(
@@ -156,6 +154,19 @@ ApplicationRecord.connected_to(database: :data_warehouse) do
 ```
 
 will query using data_warehouse configuraton.
+
+
+Alternatively you can use the method provided by activecube. It will 
+make the connection for the model or abstract class, which is super class for your models:
+
+```ruby
+My::TransfersCube.connected_to(database: :data_warehouse) do |cube|
+      cube.slice(
+              date: cube.dimensions[:date][:date].format('%Y-%m'),
+              currency: cube.dimensions[:currency][:symbol]
+      ).measure(:count).query
+    end
+```
 
 ## How it works
 

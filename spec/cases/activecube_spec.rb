@@ -7,6 +7,16 @@ RSpec.describe Activecube do
 
   let(:cube) { Test::TransfersCube }
 
+  context "context" do
+    it "executes in context" do
+      cube.connected_to(database: :default) do |c|
+        q = c.measure(:count).query
+        expect(q.rows.count).to eq(1)
+      end
+    end
+  end
+
+
   context "metrics" do
 
     it "counts record in cube" do

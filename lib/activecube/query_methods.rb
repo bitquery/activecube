@@ -3,7 +3,7 @@ require 'activecube/query/cube_query'
 module Activecube
   module QueryMethods
 
-    [:slice, :measure, :when].each do |method|
+    [:slice, :measure, :when, :skip, :take, :desc, :asc].each do |method|
       define_method(method) do |*args|
         Query::CubeQuery.new(self).send method, *args
       end

@@ -31,7 +31,7 @@ module Activecube::Query
       append *args, @measures, Measure, cube.metrics
     end
 
-    def select *args
+    def when *args
       append *args, @selectors, Selector, cube.selectors
     end
 

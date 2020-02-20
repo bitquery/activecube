@@ -60,7 +60,7 @@ module Activecube::Query
       end
     end
 
-    alias_method :from, :gteq
+    alias_method :since, :gteq
     alias_method :till, :lteq
     alias_method :is, :eq
     alias_method :after, :gt

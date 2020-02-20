@@ -85,11 +85,11 @@ RSpec.describe Activecube do
         expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date > '2019-01-01' AND transfers_currency.tx_date <= '2019-02-01'")
       end
 
-      it "fiters all cube by from / till date" do
+      it "fiters all cube by since / till date" do
 
         sql = cube.measure(
             my_count: cube.metrics[:count]
-        ).when(cube.selectors[:date].from(Date.parse('2019-01-01'))).
+        ).when(cube.selectors[:date].since(Date.parse('2019-01-01'))).
             when(cube.selectors[:date].till(Date.parse('2019-02-01'))).to_sql
 
         expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date >= '2019-01-01' AND transfers_currency.tx_date <= '2019-02-01'")

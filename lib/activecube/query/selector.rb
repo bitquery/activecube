@@ -62,6 +62,9 @@ module Activecube::Query
 
     alias_method :from, :gteq
     alias_method :till, :lteq
+    alias_method :is, :eq
+    alias_method :after, :gt
+    alias_method :before, :lt
 
     def alias! new_key
       self.class.new cube, new_key, definition, operator

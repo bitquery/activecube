@@ -13,7 +13,8 @@ module Test
 
     selector currency: CurrencySelector,
              transfer_from: TransferFromSelector,
-             transfer_to: TransferToSelector
+             transfer_to: TransferToSelector,
+             date: DateSelector
 
   end
 end

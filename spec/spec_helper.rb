@@ -11,6 +11,7 @@ require 'models/test/transfers_to'
 require 'models/test/currency_selector'
 require 'models/test/transfer_from_selector'
 require 'models/test/transfer_to_selector'
+require 'models/test/date_selector'
 
 require 'models/dimension/currency'
 require 'models/dimension/date'

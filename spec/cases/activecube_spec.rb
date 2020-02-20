@@ -56,6 +56,54 @@ RSpec.describe Activecube do
         expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.currency_id = 1")
       end
 
+      it "fiters all cube by selector" do
+
+        sql = cube.measure(
+            my_count: cube.metrics[:count]
+        ). when(cube.selectors[:currency].eq(1)).to_sql
+
+        expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.currency_id = 1")
+      end
+
+
+      it "fiters all cube by date" do
+
+        sql = cube.measure(
+            my_count: cube.metrics[:count]
+        ).when(cube.selectors[:date].eq(Date.parse('2019-01-01'))).to_sql
+
+        expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date = '2019-01-01'")
+      end
+
+      it "fiters all cube by gteq / lteq date" do
+
+        sql = cube.measure(
+            my_count: cube.metrics[:count]
+        ).when(cube.selectors[:date].gt(Date.parse('2019-01-01'))).
+            when(cube.selectors[:date].lteq(Date.parse('2019-02-01'))).to_sql
+
+        expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date > '2019-01-01' AND transfers_currency.tx_date <= '2019-02-01'")
+      end
+
+      it "fiters all cube by from / till date" do
+
+        sql = cube.measure(
+            my_count: cube.metrics[:count]
+        ).when(cube.selectors[:date].from(Date.parse('2019-01-01'))).
+            when(cube.selectors[:date].till(Date.parse('2019-02-01'))).to_sql
+
+        expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date >= '2019-01-01' AND transfers_currency.tx_date <= '2019-02-01'")
+      end
+
+      it "fiters all cube by between date" do
+
+        sql = cube.measure(
+            my_count: cube.metrics[:count]
+        ).when(cube.selectors[:date].between(Date.parse('2019-01-01'), Date.parse('2019-02-01') )).to_sql
+
+        expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency WHERE transfers_currency.tx_date BETWEEN '2019-01-01' AND '2019-02-01'")
+      end
+
       it "uses multiple selector for metric" do
 
         sql = cube.measure(
@@ -218,6 +266,20 @@ RSpec.describe Activecube do
           asc(:count).
           take(5).
           skip(5).
+          to_sql
+
+      expect(sql).to eq("SELECT transfers_currency.currency_id AS `currency`, transfers_currency.currency_id, count() AS `count` FROM transfers_currency GROUP BY transfers_currency.currency_id ORDER BY count ASC LIMIT 5 OFFSET 5")
+
+    end
+
+    it 'use offset / limit aliases' do
+
+      sql = cube.
+          measure(:count).
+          slice(:currency).
+          asc(:count).
+          limit(5).
+          offset(5).
           to_sql
 
       expect(sql).to eq("SELECT transfers_currency.currency_id AS `currency`, transfers_currency.currency_id, count() AS `count` FROM transfers_currency GROUP BY transfers_currency.currency_id ORDER BY count ASC LIMIT 5 OFFSET 5")

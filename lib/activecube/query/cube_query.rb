@@ -63,6 +63,9 @@ module Activecube::Query
       self
     end
 
+    alias_method :limit, :take
+    alias_method :offset, :skip
+
     def query
       composer = Activecube::Processor::Composer.new(self)
       sql = composer.build_query.to_sql

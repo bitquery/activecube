@@ -1,7 +1,7 @@
 module Activecube::Query
   class Selector < Item
 
-    OPERATORS = ['eq','ne','gt','lt','ge','le','in','not_in']
+    OPERATORS = ['eq','ne','gt','lt','gteq','lteq','in','not_in','between']
     ARRAY_OPERATORS = ['in','not_in']
 
     class Operator
@@ -33,6 +33,7 @@ module Activecube::Query
 
     end
 
+
     attr_reader :operator
     def initialize cube, key, definition, operator = nil
       super cube, key, definition
@@ -43,13 +44,24 @@ module Activecube::Query
       define_method(method) do |*args|
         if ARRAY_OPERATORS.include? method
           @operator = Operator.new(method, args)
+        elsif method=='between'
+          if args.kind_of?(Range)
+            @operator = Operator.new(method, args)
+          elsif args.kind_of?(Array) && args.count==2
+            @operator = Operator.new(method, args[0]..args[1])
+          else
+            raise ArgumentError, "Unexpected size of arguments for #{method}, must be Range or Array of 2"
+          end
         else
-          raise ArgumentError, "Unexpected size of arguments" unless args.size==1
+          raise ArgumentError, "Unexpected size of arguments for #{method}" unless args.size==1
           @operator = Operator.new(method, args.first)
         end
         self
       end
     end
+
+    alias_method :from, :gteq
+    alias_method :till, :lteq
 
     def alias! new_key
       self.class.new cube, new_key, definition, operator

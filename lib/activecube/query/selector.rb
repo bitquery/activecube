@@ -47,8 +47,8 @@ module Activecube::Query
         elsif method=='between'
           if args.kind_of?(Range)
             @operator = Operator.new(method, args)
-          elsif args.kind_of?(Array) && args.count==2
-            @operator = Operator.new(method, args[0]..args[1])
+          elsif args.kind_of?(Array) && args[0].count==2
+            @operator = Operator.new(method, args[0][0]..args[0][1])
           else
             raise ArgumentError, "Unexpected size of arguments for #{method}, must be Range or Array of 2"
           end

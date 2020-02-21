@@ -127,6 +127,18 @@ RSpec.describe Activecube do
         expect(sql).to eq("SELECT countIf(transfers_currency.currency_id = 1) AS `count1`, countIf(transfers_currency.currency_id = 2) AS `count2` FROM transfers_currency WHERE (transfers_currency.currency_id = 1 OR transfers_currency.currency_id = 2)")
       end
 
+      it "uses multiple metrics ( sumIf test ) with separate selectors" do
+
+        sql = cube.measure(
+            count1: cube.metrics[:amount].
+                when(cube.selectors[:currency].eq(1)),
+            count2: cube.metrics[:amount].
+                when(cube.selectors[:currency].eq(2))
+        ).to_sql
+
+        expect(sql).to eq("SELECT sumIf(transfers_currency.value,transfers_currency.currency_id = 1) / dictGetUInt64('currency', 'divider', toUInt64(1)) AS `count1`, sumIf(transfers_currency.value,transfers_currency.currency_id = 2) / dictGetUInt64('currency', 'divider', toUInt64(2)) AS `count2` FROM transfers_currency WHERE (transfers_currency.currency_id = 1 OR transfers_currency.currency_id = 2)")
+      end
+
       it "uses multiple metrics with separate selectors" do
 
         sql = cube.measure(
@@ -176,7 +188,7 @@ RSpec.describe Activecube do
           )).measure(inflow: cube.metrics[:amount].when(
           cube.selectors[:transfer_to].not_in('1111','2222')
       )).to_sql
-      puts sql
+
       expect(sql).to eq("SELECT * FROM (SELECT dictGetString('currency', 'symbol', toUInt64(currency_id)) AS `currency`, transfers_from.currency_id, SUM(transfers_from.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `outflow` FROM transfers_from WHERE transfers_from.transfer_from_bin = unhex('1111') GROUP BY transfers_from.currency_id ORDER BY `currency`) FULL OUTER JOIN (SELECT dictGetString('currency', 'symbol', toUInt64(currency_id)) AS `currency`, transfers_to.currency_id, SUM(transfers_to.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `inflow` FROM transfers_to WHERE transfers_to.transfer_to_bin NOT IN (unhex('1111'), unhex('2222')) GROUP BY transfers_to.currency_id ORDER BY `currency`)  USING currency_id")
     end
 

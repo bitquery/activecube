@@ -14,7 +14,7 @@ module Activecube::Query
 
     include ChainAppender
 
-    attr_reader :cube, :slices, :measures, :selectors, :orderings, :options
+    attr_reader :cube, :slices, :measures, :selectors, :options
     def initialize cube, slices = [], measures = [], selectors = [], options = []
       @cube = cube
       @slices = slices
@@ -120,6 +120,10 @@ module Activecube::Query
 
     def join_fields
       slices.map{|s| s.dimension_class.identity || s.key }.uniq
+    end
+
+    def orderings
+      options.select{|s| s.kind_of? Ordering}
     end
 
   end

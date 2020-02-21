@@ -24,7 +24,7 @@ module Activecube::Query
       definition.class
     end
 
-    def append_query _cube_query, table, query
+    def append_query cube_query, table, query
 
       attr_alias = "`#{key.to_s}`"
       expr = field ? Arel.sql( modifier || field.definition ) : table[dimension_class.column_name]
@@ -33,7 +33,11 @@ module Activecube::Query
       if identity = dimension_class.identity
         query = query.project(table[identity]).group(table[identity])
       else
-        query = query.group(attr_alias).order(attr_alias)
+        query = query.group(attr_alias)
+      end
+
+      if cube_query.orderings.empty?
+        query = query.order(attr_alias)
       end
 
       query

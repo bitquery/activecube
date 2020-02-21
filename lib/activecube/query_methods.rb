@@ -3,6 +3,8 @@ require 'activecube/query/cube_query'
 module Activecube
   module QueryMethods
 
+    attr_reader :database, :role
+
     [:slice, :measure, :when, :skip, :take, :desc, :asc].each do |method|
       define_method(method) do |*args|
         Query::CubeQuery.new(self).send method, *args
@@ -12,6 +14,8 @@ module Activecube
     def connected_to database: nil, role: nil, &block
       raise ArgumentError, "Must pass block to method" unless block_given?
       super_model.connected_to(database: database, role: role) do
+        @database = database
+        @role = role
         block.call self
       end
     end

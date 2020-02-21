@@ -42,6 +42,7 @@ module Activecube::Query
 
     OPERATORS.each do |method|
       define_method(method) do |*args|
+        raise ArgumentError, "Selector for #{method} already set" if operator
         if ARRAY_OPERATORS.include? method
           @operator = Operator.new(method, args)
         elsif method=='between'

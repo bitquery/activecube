@@ -25,10 +25,9 @@ module Activecube
 
     def super_model
       raise ArgumentError, "No tables specified for cube #{name}" if tables.count==0
-      return tables.first.model if tables.count==1
 
       tables.collect{ |t|
-        t.model.ancestors.select{|c| c <= ActiveRecord::Base }.reverse
+        t.model.ancestors.select{|c| c < ActiveRecord::Base }
       }.transpose.select{|c|
         c.uniq.count==1
       }.last.first

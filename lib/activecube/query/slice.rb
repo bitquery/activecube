@@ -43,6 +43,11 @@ module Activecube::Query
       query
     end
 
+    def to_s
+      "Dimension #{super}"
+    end
+
+
     private
 
     def field_methods!

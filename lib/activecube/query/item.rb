@@ -18,5 +18,9 @@ module Activecube::Query
       self.class.new cube, new_key, definition
     end
 
+    def to_s
+      "#{definition.class.name}(#{key})"
+    end
+
   end
 end

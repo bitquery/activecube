@@ -36,5 +36,9 @@ module Activecube::Query
       query.project expr.as(attr_alias)
     end
 
+    def to_s
+      "Metric #{super}"
+    end
+
   end
 end

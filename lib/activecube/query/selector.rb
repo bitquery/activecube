@@ -95,5 +95,9 @@ module Activecube::Query
       self.definition.class.hash + self.operator.hash
     end
 
+    def to_s
+      "Selector #{super}"
+    end
+
   end
 end

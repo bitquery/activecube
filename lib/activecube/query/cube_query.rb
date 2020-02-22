@@ -104,7 +104,7 @@ module Activecube::Query
         reduced_selectors = self.selectors
       else
         reduced_measures = other_measures.collect{|m|
-          Measure.new m.cube, m.key, m.definition, (m.selectors - common_selectors)
+          Measure.new m.cube, m.key, m.definition, (m.selectors - common_selectors), m.modifications
         }
         reduced_selectors = self.selectors + common_selectors
       end

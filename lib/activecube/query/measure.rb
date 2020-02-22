@@ -5,7 +5,7 @@ module Activecube::Query
   class Measure < Item
     attr_reader :selectors, :modifications
 
-    def initialize cube, key, definition, modifications = [], selectors = []
+    def initialize cube, key, definition, selectors = [], modifications = []
       super cube, key, definition
       @selectors = selectors
       @modifications = modifications
@@ -22,7 +22,7 @@ module Activecube::Query
     end
 
     def alias! new_key
-      self.class.new cube, new_key, definition, modifications, selectors
+      self.class.new cube, new_key, definition, selectors, modifications
     end
 
     def condition_query arel_table, cube_query

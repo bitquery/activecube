@@ -1,11 +1,16 @@
+require 'activecube/modifier'
+require 'activecube/query/modification'
+
 module Activecube::Query
   class Measure < Item
+    attr_reader :selectors, :modifications
 
-    attr_reader :selectors
-
-    def initialize cube, key, definition, selectors = []
+    def initialize cube, key, definition, modifications = [], selectors = []
       super cube, key, definition
       @selectors = selectors
+      @modifications = modifications
+
+      modifier_methods! if definition.class.modifiers
     end
 
     def required_column_names
@@ -17,7 +22,7 @@ module Activecube::Query
     end
 
     def alias! new_key
-      self.class.new cube, new_key, definition, selectors
+      self.class.new cube, new_key, definition, modifications, selectors
     end
 
     def condition_query arel_table, cube_query
@@ -40,5 +45,21 @@ module Activecube::Query
       "Metric #{super}"
     end
 
+    def modifier name
+      ms = modifications.select{|m| m.modifier.name==name}
+      raise "Found multiple (#{ms.count}) definitions for #{name} in #{self}" if ms.count>1
+      ms.first
+    end
+
+    private
+
+    def modifier_methods!
+      definition.class.modifiers.each_pair do |key, modifier|
+        define_singleton_method key do |*args|
+          (@modifications ||= []) << Modification.new(modifier, *args)
+          self
+        end
+      end
+    end
   end
 end

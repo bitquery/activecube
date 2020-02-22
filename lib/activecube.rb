@@ -6,8 +6,7 @@ require 'activecube/dimension'
 require 'activecube/metric'
 require 'activecube/selector'
 
-require 'activecube/common/count'
-require 'activecube/common/sum'
+require 'activecube/common/metrics'
 
 require 'active_record'
 

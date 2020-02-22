@@ -1,8 +1,8 @@
-require 'activecube/dimension_definition_methods'
+require 'activecube/definition_methods'
 
 module Activecube
   class Selector
-    extend DimensionDefinitionMethods
+    extend DefinitionMethods
 
     def expression arel_table, selector, _cube_query
       op = selector.operator

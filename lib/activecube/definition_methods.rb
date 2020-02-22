@@ -1,10 +1,12 @@
 require 'activecube/cube_definition'
 require 'activecube/field'
+require 'activecube/modifier'
 
 module Activecube
-  module DimensionDefinitionMethods
 
-    attr_reader :column_names, :identity, :fields
+  module DefinitionMethods
+
+    attr_reader :column_names
 
     def column_name
       raise "Not defined column for a metric #{self.name}" if column_names.empty?
@@ -22,14 +24,41 @@ module Activecube
       array.concat data
     end
 
-    def field *args
-      (@fields ||= {} )[args.first.to_sym] = Field.new( *args)
-    end
+
+  end
+
+  module DimensionDefinitionMethods
+
+    include DefinitionMethods
+
+    attr_reader :identity, :fields
+
+    private
 
     def identity_column *args
       raise "Identity already defined as #{identity} for #{self.name}" if @identity
       @identity = args.first
     end
 
+    def field *args
+      (@fields ||= {} )[args.first.to_sym] = Field.new( *args)
+    end
+
   end
+
+
+  module MetricDefinitionMethods
+
+    include DefinitionMethods
+
+    attr_reader :modifiers
+
+    private
+
+    def modifier *args
+      (@modifiers ||= {} )[args.first.to_sym] = Modifier.new( *args)
+    end
+
+  end
+
 end

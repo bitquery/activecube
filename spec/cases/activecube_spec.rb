@@ -44,6 +44,14 @@ RSpec.describe Activecube do
       expect(sql).to eq("SELECT count() AS `my_count` FROM transfers_currency")
     end
 
+    it "modified by function" do
+
+      sql = cube.measure(cube.metrics[:amount].calculate(:maximum)).to_sql
+
+      expect(sql).to eq("SELECT MAX(transfers_currency.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `amount` FROM transfers_currency")
+    end
+
+
     context "selectors" do
 
       it "uses selector for metric" do
@@ -136,7 +144,7 @@ RSpec.describe Activecube do
                 when(cube.selectors[:currency].eq(2))
         ).to_sql
 
-        expect(sql).to eq("SELECT sumIf(transfers_currency.value,transfers_currency.currency_id = 1) / dictGetUInt64('currency', 'divider', toUInt64(1)) AS `count1`, sumIf(transfers_currency.value,transfers_currency.currency_id = 2) / dictGetUInt64('currency', 'divider', toUInt64(2)) AS `count2` FROM transfers_currency WHERE (transfers_currency.currency_id = 1 OR transfers_currency.currency_id = 2)")
+        expect(sql).to eq("SELECT sumIf(transfers_currency.value,transfers_currency.currency_id = 1) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `count1`, sumIf(transfers_currency.value,transfers_currency.currency_id = 2) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `count2` FROM transfers_currency WHERE (transfers_currency.currency_id = 1 OR transfers_currency.currency_id = 2)")
       end
 
       it "uses multiple metrics with separate selectors" do
@@ -231,7 +239,7 @@ RSpec.describe Activecube do
               cube.selectors[:currency].eq(1)
           )).to_sql
 
-      expect(sql).to eq("SELECT * FROM (SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, SUM(transfers_to.value) / dictGetUInt64('currency', 'divider', toUInt64(1)) AS `sum_in`, count() AS `count_in` FROM transfers_to WHERE transfers_to.transfer_to_bin = unhex('adr') AND transfers_to.currency_id = 1 GROUP BY `date` ORDER BY `date`) FULL OUTER JOIN (SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, SUM(transfers_from.value) / dictGetUInt64('currency', 'divider', toUInt64(1)) AS `sum_out`, count() AS `count_out` FROM transfers_from WHERE transfers_from.transfer_from_bin = unhex('adr') AND transfers_from.currency_id = 1 GROUP BY `date` ORDER BY `date`)  USING date")
+      expect(sql).to eq("SELECT * FROM (SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, SUM(transfers_to.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `sum_in`, count() AS `count_in` FROM transfers_to WHERE transfers_to.transfer_to_bin = unhex('adr') AND transfers_to.currency_id = 1 GROUP BY `date` ORDER BY `date`) FULL OUTER JOIN (SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, SUM(transfers_from.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `sum_out`, count() AS `count_out` FROM transfers_from WHERE transfers_from.transfer_from_bin = unhex('adr') AND transfers_from.currency_id = 1 GROUP BY `date` ORDER BY `date`)  USING date")
 
     end
 

@@ -1,7 +1,7 @@
-require 'activecube/dimension_definition_methods'
+require 'activecube/definition_methods'
 
 module Activecube
   class Metric
-    extend DimensionDefinitionMethods
+    extend MetricDefinitionMethods
   end
 end

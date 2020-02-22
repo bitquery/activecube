@@ -1,19 +1,19 @@
 module Metric
-  class Amount < Activecube::Common::Sum
+  class Amount < Activecube::Metric
 
     include QueryHelper
+    include Activecube::Common::Metrics
 
     column 'value'
 
+    modifier :calculate
+
     def expression arel_table, measure, cube_query
-      selected_currency = cube_query.selectors.detect{|s| s.definition.kind_of?(Test::CurrencySelector) &&
-          s.operator.operation=='eq' } || measure.selectors.detect{|s| s.definition.kind_of?(Test::CurrencySelector) &&
-          s.operator.operation=='eq' }
-
-        super(arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider(
-                                                               selected_currency.try(:operator).try(:argument) ||
-                                                               'currency_id'))
-
+      if calculate = measure.modifier(:calculate)
+        self.send(calculate.args.first, arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
+      else
+        sum(arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
+      end
     end
 
   end

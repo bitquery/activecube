@@ -13,7 +13,7 @@ module Activecube::Query
         @argument = argument
       end
 
-      def expression left, right
+      def expression _model, left, right
         left.send(operation, right)
       end
 
@@ -72,12 +72,12 @@ module Activecube::Query
       self.class.new cube, new_key, definition, operator
     end
 
-    def append_query cube_query, table, query
-      query.where(expression table, cube_query)
+    def append_query model, cube_query, table, query
+      query.where(expression model, table, cube_query)
     end
 
-    def expression arel_table, cube_query
-      definition.expression arel_table, self, cube_query
+    def expression model, arel_table, cube_query
+      definition.expression model, arel_table, self, cube_query
     end
 
     def eql?(other)

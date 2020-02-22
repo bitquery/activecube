@@ -25,19 +25,19 @@ module Activecube::Query
       self.class.new cube, new_key, definition, selectors, modifications
     end
 
-    def condition_query arel_table, cube_query
+    def condition_query model, arel_table, cube_query
       condition = nil
       selectors.each do |selector|
         condition = condition ?
-                        condition.and(selector.expression(arel_table, cube_query)) :
-                        selector.expression(arel_table, cube_query)
+                        condition.and(selector.expression(model, arel_table, cube_query)) :
+                        selector.expression(model, arel_table, cube_query)
       end
       condition
     end
 
-    def append_query cube_query, table, query
+    def append_query model, cube_query, table, query
       attr_alias = "`#{key.to_s}`"
-      expr = definition.expression table, self, cube_query
+      expr = definition.expression model, table, self, cube_query
       query.project expr.as(attr_alias)
     end
 

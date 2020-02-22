@@ -25,7 +25,7 @@ module Activecube::Processor
       query = table
 
       (cube_query.slices + cube_query.measures + cube_query.selectors + cube_query.options).each do |s|
-        query = s.append_query cube_query, table, query
+        query = s.append_query model, cube_query, table, query
       end
 
       query
@@ -42,7 +42,7 @@ module Activecube::Processor
           using(*dimension_names)
 
       cube_query.options.each do |option|
-        query = option.append_query cube_query, outer_table, query
+        query = option.append_query model, cube_query, outer_table, query
       end
 
 

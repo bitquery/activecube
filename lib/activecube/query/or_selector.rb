@@ -9,10 +9,10 @@ module Activecube
         @selectors = selectors
       end
 
-      def append_query cube_query, table, query
+      def append_query model, cube_query, table, query
         expr = nil
         selectors.each do |s|
-          expr = expr ? expr.or(s.expression table, cube_query) : s.expression(table, cube_query)
+          expr = expr ? expr.or(s.expression model, table, cube_query) : s.expression(model, table, cube_query)
         end
         query.where(expr)
       end

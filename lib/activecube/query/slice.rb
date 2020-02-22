@@ -24,7 +24,7 @@ module Activecube::Query
       definition.class
     end
 
-    def append_query cube_query, table, query
+    def append_query _model, cube_query, table, query
 
       attr_alias = "`#{key.to_s}`"
       expr = field ? Arel.sql( modifier || field.definition ) : table[dimension_class.column_name]

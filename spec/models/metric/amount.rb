@@ -8,11 +8,11 @@ module Metric
 
     modifier :calculate
 
-    def expression arel_table, measure, cube_query
+    def expression model, arel_table, measure, cube_query
       if calculate = measure.modifier(:calculate)
-        self.send(calculate.args.first, arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
+        self.send(calculate.args.first, model, arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
       else
-        sum(arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
+        sum(model, arel_table, measure, cube_query) /  Arel.sql(dict_currency_divider('currency_id'))
       end
     end
 

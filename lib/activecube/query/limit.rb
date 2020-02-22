@@ -8,7 +8,7 @@ module Activecube
         @option = option
       end
 
-      def append_query _cube_query, _table, query
+      def append_query _model, _cube_query, _table, query
         query.send(option,argument)
       end
 

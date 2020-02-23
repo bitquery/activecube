@@ -49,22 +49,20 @@ module Activecube::Query
       self
     end
 
-    def skip *args
+    def offset *args
       args.each{|arg|
         options << Limit.new( arg, :skip)
       }
       self
     end
 
-    def take *args
+    def limit *args
       args.each{|arg|
         options << Limit.new( arg, :take)
       }
       self
     end
 
-    alias_method :limit, :take
-    alias_method :offset, :skip
 
     def query
       composer = Activecube::Processor::Composer.new(self)

@@ -132,9 +132,7 @@ The methods used to contruct the query:
 - **slice** defines which dimensions slices the results
 - **measure** defines what to measure
 - **when** defines which selectors to apply
-- **desc, asc, take, skip** are for ordering and limiting result set
-
-(take and skip have aliases: offset and limit).
+- **desc, asc, offset, limit** are for ordering and limiting result set
 
 After the query contructed, the following methods can be applied:
 

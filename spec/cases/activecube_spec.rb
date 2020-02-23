@@ -268,7 +268,7 @@ RSpec.describe Activecube do
           measure(count_out: cube.metrics[:count].when(
               cube.selectors[:transfer_from].eq('ADR')
           )).
-          desc(:count_in).desc(:count_out).take(5).skip(0)
+          desc(:count_in).desc(:count_out).limit(5).offset(0)
           .to_sql
 
       expect(sql).to eq("SELECT * FROM (SELECT dictGetString('currency', 'symbol', toUInt64(currency_id)) AS `date`, transfers_to.currency_id, dictGetString('currency', 'address', toUInt64(currency_id)) AS `address`, transfers_to.currency_id, SUM(transfers_to.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `sum_in`, count() AS `count_in` FROM transfers_to WHERE transfers_to.transfer_to_bin = unhex('adr') GROUP BY transfers_to.currency_id ORDER BY `date`, `address`) FULL OUTER JOIN (SELECT dictGetString('currency', 'symbol', toUInt64(currency_id)) AS `date`, transfers_from.currency_id, dictGetString('currency', 'address', toUInt64(currency_id)) AS `address`, transfers_from.currency_id, SUM(transfers_from.value) / dictGetUInt64('currency', 'divider', toUInt64(currency_id)) AS `sum_out`, count() AS `count_out` FROM transfers_from WHERE transfers_from.transfer_from_bin = unhex('adr') GROUP BY transfers_from.currency_id ORDER BY `date`, `address`)  USING currency_id ORDER BY count_in DESC, count_out DESC LIMIT 5 OFFSET 0")
@@ -284,8 +284,8 @@ RSpec.describe Activecube do
           measure(:count).
           slice(:currency).
           asc(:count).
-          take(5).
-          skip(5).
+          limit(5).
+          offset(5).
           to_sql
 
       expect(sql).to eq("SELECT transfers_currency.currency_id AS `currency`, transfers_currency.currency_id, count() AS `count` FROM transfers_currency GROUP BY transfers_currency.currency_id ORDER BY count ASC LIMIT 5 OFFSET 5")

@@ -210,6 +210,41 @@ RSpec.describe Activecube do
       expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, count() AS `count` FROM transfers_currency GROUP BY `date` ORDER BY `date`")
     end
 
+    context 'fields' do
+      it "use field class inline" do
+
+        sql = cube.
+            measure(:count).
+            slice(date: cube.dimensions[:date][:date_inline].format('%Y-%m')).
+            to_sql
+
+        expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, count() AS `count` FROM transfers_currency GROUP BY `date` ORDER BY `date`")
+      end
+
+      it "use field hierarchy" do
+
+        sql = cube.
+            measure(:count).
+            slice(year: cube.dimensions[:date][:day][:year][:number]).
+            to_sql
+
+        expect(sql).to eq("SELECT toYear(tx_date) AS `year`, count() AS `count` FROM transfers_currency GROUP BY `year` ORDER BY `year`")
+      end
+
+      it "use field hierarchy and method" do
+
+        sql = cube.
+            measure(:count).
+            slice(date: cube.dimensions[:date][:day][:date][:formatted].format('%Y-%m')).
+            to_sql
+
+        expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, count() AS `count` FROM transfers_currency GROUP BY `date` ORDER BY `date`")
+      end
+
+    end
+
+
+
   end
 
   context "examples" do

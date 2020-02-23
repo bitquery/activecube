@@ -41,7 +41,8 @@ module Activecube
     end
 
     def field *args
-      (@fields ||= {} )[args.first.to_sym] = Field.new( *args)
+      name = args.first.to_sym
+      (@fields ||= {} )[name] = Field.build( name, args.second )
     end
 
   end

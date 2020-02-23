@@ -10,9 +10,37 @@ module Dimension
     field 'dayOfMonth', 'toDayOfMonth(tx_date)'
     field 'dayOfWeek', 'toDayOfWeek(tx_date)'
 
-    field 'date', {
-        format: ->(string){ "formatDateTime(tx_date,'#{ string || DEFAULT_FORMAT}')" },
-        default: "formatDateTime(tx_date,'#{ DEFAULT_FORMAT}')"
+    field 'date', DateField
+
+    field 'date_inline', ( Class.new(Activecube::Field) do
+
+      def format string
+        @format = string
+      end
+
+      def expression _model, _arel_table, _slice, _cube_query
+        "formatDateTime(tx_date,'#{ @format || DEFAULT_FORMAT  }')"
+      end
+
+    end )
+
+    field 'day', {
+        year: {
+            number: 'toYear(tx_date)'
+        },
+        date: {
+            formatted: ( Class.new(Activecube::Field) do
+
+              def format string
+                @format = string
+              end
+
+              def expression _model, _arel_table, _slice, _cube_query
+                "formatDateTime(tx_date,'#{ @format || DEFAULT_FORMAT  }')"
+              end
+
+            end )
+        }
     }
 
   end

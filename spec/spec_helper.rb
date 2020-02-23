@@ -14,7 +14,9 @@ require 'models/test/transfer_to_selector'
 require 'models/test/date_selector'
 
 require 'models/dimension/currency'
+require 'models/dimension/date_field'
 require 'models/dimension/date'
+
 
 require 'models/metric/amount'
 require 'models/metric/count'

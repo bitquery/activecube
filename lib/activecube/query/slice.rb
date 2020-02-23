@@ -1,36 +1,51 @@
 module Activecube::Query
   class Slice < Item
 
-    attr_reader :field, :modifier
-    def initialize cube, key, dimension, field = nil, modifier = nil
-      super cube, key, dimension
-      @field = field
-      @modifier = modifier
-      field_methods! if field.try(:definition).kind_of?(Hash)
+    attr_reader :dimension, :parent
+    def initialize cube, key, definition, parent = nil
+      super cube, key, definition
+      @dimension = parent ? parent.dimension : definition
+      @parent = parent
+    end
+
+    def required_column_names
+      dimension.class.column_names || []
     end
 
     def [] key
-      unless (definition.kind_of? Activecube::Dimension) && !self.field && (field = definition.class.fields[key])
-        raise "Field #{key} is not defined for #{definition.name}"
+
+      child = if definition.kind_of? Activecube::Dimension
+                definition.class.fields[key]
+              elsif definition.kind_of?(Activecube::Field) && (hash = definition.definition).kind_of?(Hash)
+                hash[key]
+              end
+
+      raise "Field #{key} is not defined for #{definition}" unless child
+
+      if child.kind_of?(Class) && child <= Activecube::Field
+        child = child.new key
+      elsif !child.kind_of?(Activecube::Field)
+        child = Activecube::Field.new(key, child)
       end
-      Slice.new cube, key, definition, field
+
+      Slice.new cube, key, child, self
+
     end
 
     def alias! new_key
-      self.class.new cube, new_key, definition, field, modifier
+      self.class.new cube, new_key, definition, parent
     end
 
-    def dimension_class
-      definition.class
-    end
-
-    def append_query _model, cube_query, table, query
+    def append_query model, cube_query, table, query
 
       attr_alias = "`#{key.to_s}`"
-      expr = field ? Arel.sql( modifier || field.definition ) : table[dimension_class.column_name]
+      expr = parent ?
+                 Arel.sql(definition.expression(model, cube_query, table, query) ) :
+                 table[dimension.class.column_name]
+
       query = query.project(expr.as(attr_alias))
 
-      if identity = dimension_class.identity
+      if identity = dimension.class.identity
         query = query.project(table[identity]).group(table[identity])
       else
         query = query.group(attr_alias)
@@ -44,22 +59,16 @@ module Activecube::Query
     end
 
     def to_s
-      "Dimension #{super}"
+      parent ? "Dimension #{dimension}[#{super}]" : "Dimension #{super}"
     end
 
+    def respond_to? method, include_private = false
+      definition.kind_of?(Activecube::Field) && definition.class!=Activecube::Field && definition.respond_to?(method)
+    end
 
-    private
-
-    def field_methods!
-      field.definition.each_pair do |k,v|
-        if v.kind_of? Proc
-          define_singleton_method k, ((proc {|x| @modifier = x; self}) << v)
-        elsif v.kind_of? String
-          define_singleton_method k do @modifier = v; self end
-        else
-          raise "Unexpected type #{k.class.name} for definition of #{name}[#{k}]"
-        end
-      end
+    def method_missing method, *args
+      definition.send method, *args
+      self
     end
 
   end

@@ -6,6 +6,12 @@ module Activecube::Query
       super cube, key, definition
       @dimension = parent ? parent.dimension : definition
       @parent = parent
+      
+      if parent
+        raise "Unexpected class #{definition.class.name}" unless definition.kind_of?(Activecube::Field)
+        field_methods! if definition.class < Activecube::Field
+      end  
+      
     end
 
     def required_column_names
@@ -61,15 +67,19 @@ module Activecube::Query
     def to_s
       parent ? "Dimension #{dimension}[#{super}]" : "Dimension #{super}"
     end
-
-    def respond_to? method, include_private = false
-      definition.kind_of?(Activecube::Field) && definition.class!=Activecube::Field && definition.respond_to?(method)
+    
+    def field_methods!
+      excluded = [:expression] + self.class.instance_methods(false)
+      definition.class.instance_methods(false).each do |name|
+        unless excluded.include?(name)
+          define_singleton_method name do |*args|
+            definition.send name, *args
+            self
+          end
+        end
+      end
     end
-
-    def method_missing method, *args
-      definition.send method, *args
-      self
-    end
+        
 
   end
 end

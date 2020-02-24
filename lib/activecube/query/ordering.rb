@@ -9,7 +9,8 @@ module Activecube
       end
 
       def append_query _model, _cube_query, _table, query
-        query.order(::Arel.sql(argument.to_s).send(direction))
+        text = argument.to_s.split(',').map{|s| "`#{s}`"}.join(',')
+        query.order(::Arel.sql(text).send(direction))
       end
 
     end

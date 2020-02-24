@@ -86,7 +86,7 @@ module Activecube::Query
       (measures.map(&:selectors) + selectors).flatten.map(&:required_column_names).flatten.uniq
     end
 
-    def reduced other_measures
+    def reduced other_measures, other_options
 
       common_selectors = []
       other_measures.each_with_index do |m,i|
@@ -113,7 +113,7 @@ module Activecube::Query
 
       return self if (reduced_measures == self.measures) && (reduced_selectors == self.selectors)
 
-      CubeQuery.new cube, slices, reduced_measures, reduced_selectors
+      CubeQuery.new cube, slices, reduced_measures, reduced_selectors, other_options
     end
 
     def join_fields

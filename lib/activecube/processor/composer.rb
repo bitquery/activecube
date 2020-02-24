@@ -70,7 +70,8 @@ module Activecube::Processor
       @models = []
       measure_tables.group_by(&:table).each_pair do |table, list|
         @models << table.model
-        reduced = cube_query.reduced list.map(&:measure)
+        reduce_options = measure_tables.count==1 ? cube_query.options : []
+        reduced = cube_query.reduced list.map(&:measure), reduce_options
         table_query = table.query reduced
         composed_query = composed_query ? table.join(cube_query, composed_query, table_query) : table_query
       end

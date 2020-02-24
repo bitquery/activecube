@@ -18,7 +18,9 @@ module Activecube::Query
       dimension.class.column_names || []
     end
 
-    def [] key
+    def [] arg
+
+      key = arg.to_sym
 
       child = if definition.kind_of? Activecube::Dimension
                 definition.class.fields[key]
@@ -46,7 +48,7 @@ module Activecube::Query
 
       attr_alias = "`#{key.to_s}`"
       expr = parent ?
-                 Arel.sql(definition.expression(model, cube_query, table, query) ) :
+                 Arel.sql(definition.expression( model, table, self, cube_query) ) :
                  table[dimension.class.column_name]
 
       query = query.project(expr.as(attr_alias))

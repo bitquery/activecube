@@ -7,7 +7,7 @@ module Activecube
       if arg.kind_of? String
         Field.new name, arg
       elsif arg.kind_of? Hash
-        Field.new name, arg
+        Field.new name, arg.symbolize_keys
       elsif arg.kind_of?(Class) && arg < Field
         arg.new name
       else

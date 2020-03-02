@@ -210,6 +210,26 @@ RSpec.describe Activecube do
       expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, count() AS `count` FROM transfers_currency GROUP BY `date` ORDER BY `date`")
     end
 
+    it "can slice with no measures" do
+
+      sql = cube.
+          slice(date: cube.dimensions[:date][:date].format('%Y-%m')).
+          to_sql
+
+      expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date` FROM transfers_currency GROUP BY `date` ORDER BY `date`")
+    end
+
+
+    it "uses selector for slice" do
+      sql = cube.
+          measure(:count).
+          slice(date: cube.dimensions[:date][:date].format('%Y-%m').
+                      when( cube.selectors[:transfer_to].not_in('1111','2222') )).
+          to_sql
+
+      expect(sql).to eq("SELECT formatDateTime(tx_date,'%Y-%m') AS `date`, count() AS `count` FROM transfers_to WHERE transfers_to.transfer_to_bin NOT IN (unhex('1111'), unhex('2222')) GROUP BY `date` ORDER BY `date`")
+    end
+
     it "use function modifers ( format ) as send" do
 
       sql = cube.

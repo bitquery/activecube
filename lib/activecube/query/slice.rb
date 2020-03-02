@@ -1,11 +1,13 @@
 module Activecube::Query
   class Slice < Item
 
-    attr_reader :dimension, :parent
-    def initialize cube, key, definition, parent = nil
+    attr_reader :dimension, :parent, :selectors
+    def initialize cube, key, definition, parent = nil, selectors = []
       super cube, key, definition
       @dimension = parent ? parent.dimension : definition
       @parent = parent
+
+      @selectors = selectors
       
       if parent
         raise "Unexpected class #{definition.class.name}" unless definition.kind_of?(Activecube::Field)
@@ -15,7 +17,7 @@ module Activecube::Query
     end
 
     def required_column_names
-      dimension.class.column_names || []
+      ((dimension.class.column_names || []) + selectors.map(&:required_column_names) ).flatten.uniq
     end
 
     def [] arg
@@ -41,7 +43,11 @@ module Activecube::Query
     end
 
     def alias! new_key
-      self.class.new cube, new_key, definition, parent
+      self.class.new cube, new_key, definition,  parent, selectors
+    end
+
+    def when *args
+      append *args, @selectors, Selector, cube.selectors
     end
 
     def append_query model, cube_query, table, query
@@ -61,6 +67,10 @@ module Activecube::Query
 
       if cube_query.orderings.empty?
         query = query.order(attr_alias)
+      end
+
+      selectors.each do |selector|
+        selector.append_query model, cube_query, table, query
       end
 
       query

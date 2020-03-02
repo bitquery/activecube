@@ -2,6 +2,7 @@ require 'activecube/processor/index'
 require 'activecube/processor/measure_tables'
 require 'activecube/processor/optimizer'
 require 'activecube/processor/table'
+require 'activecube/query/measure_nothing'
 
 module Activecube::Processor
   class Composer
@@ -51,7 +52,10 @@ module Activecube::Processor
 
     def ranked_tables
       tables = cube_query.cube.tables.select{|table| table.matches? cube_query, []}
-      cube_query.measures.collect do |measure|
+      measures = cube_query.measures.empty? ?
+                     [Activecube::Query::MeasureNothing.new(cube_query.cube)] :
+                     cube_query.measures
+      measures.collect do |measure|
         by = MeasureTables.new measure
         tables.each{|table|
           next unless table.measures? measure

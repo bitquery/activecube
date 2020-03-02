@@ -1,7 +1,7 @@
 module Activecube::Query
   class Selector < Item
 
-    OPERATORS = ['eq','ne','gt','lt','gteq','lteq','in','not_in','between']
+    OPERATORS = ['eq','not_eq','gt','lt','gteq','lteq','in','not_in','between']
     ARRAY_OPERATORS = ['in','not_in']
 
     class Operator
@@ -64,7 +64,7 @@ module Activecube::Query
     alias_method :since, :gteq
     alias_method :till, :lteq
     alias_method :is, :eq
-    alias_method :not, :ne
+    alias_method :not, :not_eq
     alias_method :after, :gt
     alias_method :before, :lt
 

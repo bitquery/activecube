@@ -10,7 +10,7 @@ module Activecube::Query
       @selectors = selectors
       @modifications = modifications
 
-      modifier_methods! if definition.class.modifiers
+      modifier_methods! if definition && definition.class.modifiers
     end
 
     def required_column_names

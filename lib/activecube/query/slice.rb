@@ -50,6 +50,14 @@ module Activecube::Query
       append *args, @selectors, Selector, cube.selectors
     end
 
+    def group_by_columns
+      if dimension.class.identity
+        ([dimension.class.identity] + dimension.class.column_names).uniq
+      else
+        [key]
+      end
+    end
+
     def append_query model, cube_query, table, query
 
       attr_alias = "`#{key.to_s}`"
@@ -59,8 +67,10 @@ module Activecube::Query
 
       query = query.project(expr.as(attr_alias))
 
-      if identity = dimension.class.identity
-        query = query.project(table[identity]).group(table[identity])
+      if dimension.class.identity
+        group_by_columns.each do |column|
+            query = query.project(table[column]).group(table[column])
+        end
       else
         query = query.group(attr_alias)
       end

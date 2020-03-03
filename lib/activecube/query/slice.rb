@@ -61,7 +61,7 @@ module Activecube::Query
     def append_query model, cube_query, table, query
 
       attr_alias = "`#{key.to_s}`"
-      expr = parent ?
+      expr = (parent || definition.respond_to?(:expression)) ?
                  Arel.sql(definition.expression( model, table, self, cube_query) ) :
                  table[dimension.class.column_name]
 

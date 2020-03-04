@@ -3,6 +3,10 @@ module Activecube::Query
 
     OPERATORS = ['eq','not_eq','gt','lt','gteq','lteq','in','not_in','between']
     ARRAY_OPERATORS = ['in','not_in']
+    ARRAY_OPERATOR_MAP = {
+        'eq' => 'in',
+        'not_eq' => 'not_in'
+    }
 
     class Operator
 
@@ -14,7 +18,11 @@ module Activecube::Query
       end
 
       def expression _model, left, right
-        left.send(operation, right)
+        if right.kind_of?(Array) && (matching_array_op = ARRAY_OPERATOR_MAP[operation])
+          left.send(matching_array_op, right)
+        else
+          left.send(operation, right)
+        end
       end
 
       def eql?(other)

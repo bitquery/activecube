@@ -12,7 +12,7 @@ module Activecube
     end
 
     def connected_to database: nil, role: nil, &block
-      raise ArgumentError, "Must pass block to method" unless block_given?
+      raise Activecube::InputArgumentError, "Must pass block to method" unless block_given?
       super_model.connected_to(database: database, role: role) do
         @database = database
         @role = role
@@ -24,7 +24,7 @@ module Activecube
 
 
     def super_model
-      raise ArgumentError, "No tables specified for cube #{name}" if tables.count==0
+      raise Activecube::InputArgumentError, "No tables specified for cube #{name}" if tables.count==0
 
       tables.collect{ |t|
         t.model.ancestors.select{|c| c < ActiveRecord::Base }

@@ -30,7 +30,7 @@ module Activecube::Query
                 hash[key]
               end
 
-      raise ArgumentError, "Field #{key} is not defined for #{definition}" unless child
+      raise Activecube::InputArgumentError, "Field #{key} is not defined for #{definition}" unless child
 
       if child.kind_of?(Class) && child <= Activecube::Field
         child = child.new key

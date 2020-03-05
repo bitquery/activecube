@@ -50,7 +50,7 @@ module Activecube::Query
 
     OPERATORS.each do |method|
       define_method(method) do |*args|
-        raise ArgumentError, "Selector for #{method} already set" if operator
+        raise Activecube::InputArgumentError, "Selector for #{method} already set" if operator
         if ARRAY_OPERATORS.include? method
           @operator = Operator.new(method, args.flatten)
         elsif method=='between'
@@ -59,10 +59,10 @@ module Activecube::Query
           elsif args.kind_of?(Array) && (arg = args.flatten).count==2
             @operator = Operator.new(method, arg[0]..arg[1])
           else
-            raise ArgumentError, "Unexpected size of arguments for #{method}, must be Range or Array of 2"
+            raise Activecube::InputArgumentError, "Unexpected size of arguments for #{method}, must be Range or Array of 2"
           end
         else
-          raise ArgumentError, "Unexpected size of arguments for #{method}" unless args.size==1
+          raise Activecube::InputArgumentError, "Unexpected size of arguments for #{method}" unless args.size==1
           @operator = Operator.new(method, args.first)
         end
         self

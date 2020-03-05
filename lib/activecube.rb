@@ -1,6 +1,7 @@
 require "activecube/version"
 require 'activecube/active_record_extension'
 
+require 'activecube/input_argument_error'
 require 'activecube/base'
 require 'activecube/dimension'
 require 'activecube/metric'

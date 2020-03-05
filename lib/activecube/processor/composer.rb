@@ -64,7 +64,7 @@ module Activecube::Processor
           }.sort_by(&:cardinality).last
           by.add_table table, max_cardinality_index
         }
-        raise "Metric #{measure.key} #{measure.definition.name} can not be measured by any of tables #{tables.map(&:name).join(',')}" if by.tables.empty?
+        raise "Metric #{measure.key} #{measure.definition.try(:name) || measure.class.name} can not be measured by any of tables #{tables.map(&:name).join(',')}" if by.tables.empty?
         by
       end
     end

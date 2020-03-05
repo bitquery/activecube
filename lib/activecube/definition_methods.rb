@@ -9,7 +9,7 @@ module Activecube
     attr_reader :column_names
 
     def column_name
-      raise "Not defined column for a a dimension or metric #{self.name}" if column_names.empty?
+      raise "Not defined column for a dimension or metric #{self.name}" if !column_names || column_names.empty?
       raise "Defined more than one column for a dimension or metric #{self.name}" if column_names.count>1
       column_names.first
     end

@@ -24,10 +24,10 @@ module Activecube
 
 
     def super_model
-      raise Activecube::InputArgumentError, "No tables specified for cube #{name}" if tables.count==0
+      raise Activecube::InputArgumentError, "No tables specified for cube #{name}" if models.count==0
 
-      tables.collect{ |t|
-        t.model.ancestors.select{|c| c < ActiveRecord::Base }
+      models.collect{ |t|
+        t.ancestors.select{|c| c < ActiveRecord::Base }
       }.transpose.select{|c|
         c.uniq.count==1
       }.last.first

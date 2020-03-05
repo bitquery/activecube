@@ -51,7 +51,7 @@ module Activecube::Processor
     end
 
     def ranked_tables
-      tables = cube_query.cube.tables.select{|table| table.matches? cube_query, []}
+      tables = cube_query.tables.select{|table| table.matches? cube_query, []}
       measures = cube_query.measures.empty? ?
                      [Activecube::Query::MeasureNothing.new(cube_query.cube)] :
                      cube_query.measures

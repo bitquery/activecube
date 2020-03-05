@@ -14,13 +14,14 @@ module Activecube::Query
 
     include ChainAppender
 
-    attr_reader :cube, :slices, :measures, :selectors, :options
-    def initialize cube, slices = [], measures = [], selectors = [], options = []
+    attr_reader :cube, :slices, :measures, :selectors, :options, :tables
+    def initialize cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil
       @cube = cube
       @slices = slices
       @measures = measures
       @selectors = selectors
       @options = options
+      @tables = model_tables || cube.models.map{|m| Activecube::Processor::Table.new m}
     end
 
     def slice *args
@@ -113,7 +114,7 @@ module Activecube::Query
 
       return self if (reduced_measures == self.measures) && (reduced_selectors == self.selectors)
 
-      CubeQuery.new cube, slices, reduced_measures, reduced_selectors, other_options
+      CubeQuery.new cube, slices, reduced_measures, reduced_selectors, other_options, tables
     end
 
     def join_fields

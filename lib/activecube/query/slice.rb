@@ -24,10 +24,10 @@ module Activecube::Query
 
       key = arg.to_sym
 
-      child = if definition.kind_of? Activecube::Dimension
-                definition.class.fields && definition.class.fields[key]
+      child = if definition.kind_of?(Activecube::Dimension) && definition.class.fields && (fdef = definition.class.fields[key])
+                Activecube::Field.build key, fdef
               elsif definition.kind_of?(Activecube::Field) && (hash = definition.definition).kind_of?(Hash)
-                hash[key]
+                Activecube::Field.build key, hash[key]
               end
 
       raise Activecube::InputArgumentError, "Field #{key} is not defined for #{definition}" unless child

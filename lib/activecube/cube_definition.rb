@@ -13,19 +13,19 @@ module Activecube
 
       def [] key
         v = super key
-        v.nil? ? nil : @entry_class.new(@cube, key, v)
+        v.nil? ? nil : @entry_class.new(@cube, key, v.new)
       end
 
     end
 
-    attr_reader :dimensions, :metrics, :selectors, :tables
+    attr_reader :dimensions, :metrics, :selectors, :models
 
     def inspect
       name +
           (@dimensions && " Dimensions: #{@dimensions.keys.join(',')}")+
           (@metrics && " Metrics: #{@metrics.keys.join(',')}")+
           (@selectors && " Selectors: #{@selectors.keys.join(',')}")+
-          (@tables && " Tables: #{@tables.map(&:name).join(',')}")
+          (@models && " Models: #{@models.map(&:name).join(',')}")
     end
 
     private
@@ -43,13 +43,13 @@ module Activecube
     end
 
     def table *args
-      store_definition_array! 'table', (@tables ||= []), [*args].flatten.map{|t| Processor::Table.new t }
+      store_definition_array! 'model', (@models ||= []), [*args].flatten.map{|t| t }
     end
 
     def store_definition_map! name, map, data
       data.each_pair do |key, class_def|
         raise DefinitionError, "#{key} already defined for #{name}" if map.has_key?(key)
-        map[key] = class_def.new
+        map[key] = class_def
       end
     end
 

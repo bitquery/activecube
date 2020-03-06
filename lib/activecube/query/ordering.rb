@@ -9,8 +9,16 @@ module Activecube
       end
 
       def append_query _model, _cube_query, _table, query
-        text = argument.to_s.split(',').map{|s| "`#{s}`"}.join(',')
+        text = argument.to_s.split(',').map{|s| quote s}.join(',')
         query.order(::Arel.sql(text).send(direction))
+      end
+
+      def quote s
+        if s =~ /^[\w\.]+$/
+          "`#{s}`"
+        else
+          s
+        end
       end
 
     end

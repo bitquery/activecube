@@ -398,6 +398,19 @@ RSpec.describe Activecube do
 
     end
 
+    it 'ordering case with multiple internal measure reduction' do
+
+      sql = cube.
+          measure(count: cube.metrics[:count].when(cube.selectors[:transfer_from].eq('ADR'))).
+          measure(count2: cube.metrics[:count].when(cube.selectors[:transfer_from].eq('ADR2'))).
+          slice(year: cube.dimensions[:date][:year]).
+          asc('count').limit(2).
+          to_sql
+
+      expect(sql).to eq("SELECT toYear(tx_date) AS `year`, countIf(transfers_from.transfer_from_bin = unhex('adr')) AS `count`, countIf(transfers_from.transfer_from_bin = unhex('adr2')) AS `count2` FROM transfers_from WHERE (transfers_from.transfer_from_bin = unhex('adr') OR transfers_from.transfer_from_bin = unhex('adr2')) GROUP BY `year` ORDER BY `count` ASC LIMIT 2")
+
+    end
+
   end
 
 end

@@ -7,7 +7,7 @@ Cube.slice(
     date: cube.dimensions[:date][:date].format('%Y-%m'),
     currency: cube.dimensions[:currency][:symbol]
 ).measure(:count).
-when(cube.selectors[:currency].in('USD','EUR').to_sql
+when(cube.selectors[:currency].in('USD','EUR')).to_sql
 ```
 
 Cube, dimensions, metrics and selectors are defined in the Model, similary to

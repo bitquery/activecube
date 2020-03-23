@@ -46,6 +46,18 @@ module Activecube
       store_definition_array! 'model', (@models ||= []), [*args].flatten.map{|t| t }
     end
 
+    def dim_column column_name
+      Class.new(Activecube::Dimension) do
+        column column_name
+      end
+    end
+
+    def select_column column_name
+      Class.new(Activecube::Selector) do
+        column column_name
+      end
+    end
+
     def store_definition_map! name, map, data
       data.each_pair do |key, class_def|
         raise DefinitionError, "#{key} already defined for #{name}" if map.has_key?(key)
@@ -58,5 +70,6 @@ module Activecube
       raise DefinitionError, "#{values.join(',')} already defined for #{name}" unless values.empty?
       array.concat data
     end
+
   end
 end

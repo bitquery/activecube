@@ -69,7 +69,10 @@ module Activecube::Query
 
       if dimension.class.identity
         group_by_columns.each do |column|
-            query = query.project(table[column]).group(table[column])
+          if !query.projections.detect{|p| p.kind_of?(::Arel::Attributes::Attribute) && p.name==column}
+            query = query.project(table[column])
+          end
+          query = query.group(table[column])
         end
       else
         query = query.group(attr_alias)

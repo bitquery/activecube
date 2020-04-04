@@ -35,7 +35,7 @@ module Activecube::Processor
 
       outer_table = model.arel_table.class.new('').project(Arel.star)
 
-      dimension_names = cube_query.join_fields
+      dimension_names = (cube_query.join_fields + cube_query.slices.map{|s| s.key} ).uniq
 
       query = outer_table.from(left_query).
           join(right_query, ::Arel::Nodes::FullOuterJoin).

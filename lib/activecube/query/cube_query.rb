@@ -118,7 +118,7 @@ module Activecube::Query
     end
 
     def join_fields
-      slices.map(&:group_by_columns).uniq
+      slices.map(&:group_by_columns).flatten.uniq
     end
 
     def orderings

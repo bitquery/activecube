@@ -37,7 +37,7 @@ module Activecube::Processor
 
       before = total_cost measure_tables
       Optimizer.new(cost_matrix).optimize.each_with_index do |optimal, index|
-        measure_tables[index].selected = optimal
+        measure_tables[index].selected = measure_tables[index].entries.map(&:table).index(all_tables[optimal])
       end
       after = total_cost measure_tables
 

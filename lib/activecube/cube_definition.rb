@@ -52,10 +52,18 @@ module Activecube
       end
     end
 
-    def metric_column column_name
+    def metric_column column_name, aggregation = :sum
+
       Class.new(Activecube::Metric) do
+
+        include Activecube::Common::Metrics
+
         column column_name
-        modifier :calculate
+
+        define_method :expression do |model, arel_table, measure, cube_query|
+          self.send aggregation, model, arel_table, measure, cube_query
+        end
+
       end
     end
 

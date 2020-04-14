@@ -52,7 +52,7 @@ module Activecube
       end
     end
 
-    def metric_column column_name, aggregation = :sum
+    def metric_column column_name
 
       Class.new(Activecube::Metric) do
 
@@ -60,9 +60,16 @@ module Activecube
 
         column column_name
 
+        modifier :calculate
+
         define_method :expression do |model, arel_table, measure, cube_query|
-          self.send aggregation, model, arel_table, measure, cube_query
+          if calculate = measure.modifier(:calculate)
+            self.send(calculate.args.first, model, arel_table, measure, cube_query)
+          else
+            sum(model, arel_table, measure, cube_query)
+          end
         end
+
 
       end
     end

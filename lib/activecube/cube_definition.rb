@@ -52,6 +52,13 @@ module Activecube
       end
     end
 
+    def metric_column column_name
+      Class.new(Activecube::Metric) do
+        column column_name
+        modifier :calculate
+      end
+    end
+
     def select_column column_name
       Class.new(Activecube::Selector) do
         column column_name

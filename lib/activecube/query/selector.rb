@@ -8,6 +8,35 @@ module Activecube::Query
         'not_eq' => 'not_in'
     }
 
+    class CombineSelector < Selector
+
+      def initialize selectors, operator
+        @selectors = selectors
+        @operator = operator
+      end
+
+      def required_column_names
+        @selectors.map(&:required_column_names).uniq
+      end
+
+      def to_s
+        "Selector any(#{@selectors.map(&:to_s).join(',')})"
+      end
+
+      def expression model, arel_table, cube_query
+        expr = nil
+        @selectors.each do |s|
+          expr = expr ? expr.send(@operator, s.expression(model, arel_table, cube_query)) : s.expression(model, arel_table, cube_query)
+        end
+        expr
+      end
+
+      def append_query model, cube_query, arel_table, query
+        query.where expression(model, arel_table, cube_query)
+      end
+
+    end
+
     class Operator
 
       attr_reader :operation, :argument
@@ -105,6 +134,14 @@ module Activecube::Query
 
     def to_s
       "Selector #{super}"
+    end
+
+    def self.or(selectors)
+      CombineSelector.new(selectors, :or)
+    end
+
+    def self.and(selectors)
+      CombineSelector.new(selectors, :and)
     end
 
   end

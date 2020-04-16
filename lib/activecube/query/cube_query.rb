@@ -2,7 +2,6 @@ require 'activecube/query/chain_appender'
 require 'activecube/query/item'
 require 'activecube/query/limit'
 require 'activecube/query/measure'
-require 'activecube/query/or_selector'
 require 'activecube/query/ordering'
 require 'activecube/query/selector'
 require 'activecube/query/slice'
@@ -109,7 +108,7 @@ module Activecube::Query
       end
 
       unless reduced_measures.detect{|rm| rm.selectors.empty? }
-        reduced_selectors += [OrSelector.new(reduced_measures.map(&:selectors).flatten.uniq)]
+        reduced_selectors += [Selector.or(reduced_measures.map(&:selectors).flatten.uniq)]
       end
 
       return self if (reduced_measures == self.measures) && (reduced_selectors == self.selectors)

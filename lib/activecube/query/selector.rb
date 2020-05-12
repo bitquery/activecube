@@ -20,13 +20,13 @@ module Activecube::Query
       end
 
       def to_s
-        "Selector any(#{@selectors.map(&:to_s).join(',')})"
+        "Selector #{operator.operation}(#{@selectors.map(&:to_s).join(',')})"
       end
 
       def expression model, arel_table, cube_query
         expr = nil
         @selectors.each do |s|
-          expr = expr ? expr.send(@operator, s.expression(model, arel_table, cube_query)) : s.expression(model, arel_table, cube_query)
+          expr = expr ? expr.send( operator.operation, s.expression(model, arel_table, cube_query)) : s.expression(model, arel_table, cube_query)
         end
         expr
       end
@@ -137,11 +137,11 @@ module Activecube::Query
     end
 
     def self.or(selectors)
-      CombineSelector.new(selectors, :or)
+      CombineSelector.new(selectors, Operator.new(:or, nil) )
     end
 
     def self.and(selectors)
-      CombineSelector.new(selectors, :and)
+      CombineSelector.new(selectors, Operator.new(:and, nil))
     end
 
   end

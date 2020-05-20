@@ -44,7 +44,6 @@ module Activecube::Query
       def initialize operation, argument
         @operation = operation
         @argument = argument
-        Rails.logger.info "Created selector for #{operation} with #{argument}"
       end
 
       def expression _model, left, right

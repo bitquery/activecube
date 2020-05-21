@@ -20,7 +20,9 @@ module Activecube::Query
       @measures = measures
       @selectors = selectors
       @options = options
-      @tables = model_tables || cube.models.map{|m| Activecube::Processor::Table.new m}
+      @tables = model_tables || cube.models.map{|m|
+        m < Activecube::View ? m.new : Activecube::Processor::Table.new(m)
+      }
     end
 
     def slice *args

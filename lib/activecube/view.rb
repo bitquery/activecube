@@ -1,8 +1,10 @@
 require 'activecube/view_definition'
+require 'activecube/view_connection'
 
 module Activecube
   class View
     extend ViewDefinition
+    extend ViewConnection
 
     def model
       self.class

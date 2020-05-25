@@ -26,7 +26,7 @@ module Activecube::Query
         m < Activecube::View ? m.new : Activecube::Processor::Table.new(m)
       }
 
-      cube.options.each do |option|
+      cube.options && cube.options.each do |option|
         define_singleton_method option.to_s.underscore do |*args|
           @options << Option.new(option, *args)
           self

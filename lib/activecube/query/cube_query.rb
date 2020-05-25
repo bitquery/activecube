@@ -3,6 +3,7 @@ require 'activecube/query/item'
 require 'activecube/query/limit'
 require 'activecube/query/measure'
 require 'activecube/query/ordering'
+require 'activecube/query/option'
 require 'activecube/query/selector'
 require 'activecube/query/slice'
 
@@ -20,9 +21,18 @@ module Activecube::Query
       @measures = measures
       @selectors = selectors
       @options = options
+
       @tables = model_tables || cube.models.map{|m|
         m < Activecube::View ? m.new : Activecube::Processor::Table.new(m)
       }
+
+      cube.options.each do |option|
+        define_singleton_method option.to_s.underscore do |*args|
+          @options << Option.new(option, *args)
+          self
+        end
+      end
+
     end
 
     def slice *args

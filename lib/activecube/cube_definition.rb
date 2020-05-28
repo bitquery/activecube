@@ -18,7 +18,7 @@ module Activecube
 
     end
 
-    attr_reader :dimensions, :metrics, :selectors, :models
+    attr_reader :dimensions, :metrics, :selectors, :models, :options
 
     def inspect
       name +
@@ -44,6 +44,10 @@ module Activecube
 
     def table *args
       store_definition_array! 'model', (@models ||= []), [*args].flatten.map{|t| t }
+    end
+
+    def option *args
+      store_definition_array! 'option', (@options ||= []), [*args].flatten.map{|t| t }
     end
 
     def dim_column column_name

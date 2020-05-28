@@ -26,7 +26,6 @@ module Activecube::Processor
 
       (cube_query.slices + cube_query.measures + cube_query.selectors + cube_query.options).each do |s|
         query = s.append_query model, cube_query, table, query
-        Rails.logger.info "Query #{query.to_sql} after applying  #{s}"
       end
 
       query

@@ -44,14 +44,12 @@ module Activecube::Query
       def initialize operation, argument
         @operation = operation
         @argument = argument
-        Rails.logger.info "Created selector #{self} for #{operation} with #{argument}"
       end
 
       def expression _model, left, right
         if right.kind_of?(Array) && (matching_array_op = ARRAY_OPERATOR_MAP[operation])
           left.send(matching_array_op, right)
         else
-          Rails.logger.info "Operator operation #{operation} argument #{argument}, sending #{operation} #{right} to #{left}"
           left.send(operation, right)
         end
       end

@@ -14,7 +14,7 @@ module Activecube::Query
 
     include ChainAppender
 
-    attr_reader :cube, :slices, :measures, :selectors, :options, :tables
+    attr_reader :cube, :slices, :measures, :selectors, :options, :tables, :sql
     def initialize cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil
       @cube = cube
       @slices = slices
@@ -36,18 +36,22 @@ module Activecube::Query
     end
 
     def slice *args
+      clear_sql
       append *args, @slices, Slice, cube.dimensions
     end
 
     def measure *args
+      clear_sql
       append *args, @measures, Measure, cube.metrics
     end
 
     def when *args
+      clear_sql
       append *args, @selectors, Selector, cube.selectors
     end
 
     def desc *args
+      clear_sql
       args.each{|arg|
         options << Ordering.new(arg, :desc)
       }
@@ -55,6 +59,7 @@ module Activecube::Query
     end
 
     def asc *args
+      clear_sql
       args.each{|arg|
         options << Ordering.new( arg, :asc)
       }
@@ -62,6 +67,7 @@ module Activecube::Query
     end
 
     def offset *args
+      clear_sql
       args.each{|arg|
         options << Limit.new( arg, :skip)
       }
@@ -69,6 +75,7 @@ module Activecube::Query
     end
 
     def limit *args
+      clear_sql
       args.each{|arg|
         options << Limit.new( arg, :take)
       }
@@ -77,13 +84,12 @@ module Activecube::Query
 
 
     def query
-      composer = Activecube::Processor::Composer.new(self)
-      sql = composer.build_query.to_sql
-      composer.connection.exec_query(sql)
+      sql = to_query.to_sql
+      @composed.connection.exec_query(sql)
     end
 
     def to_query
-      Activecube::Processor::Composer.new(self).build_query
+      @composed.try(:query) || (@composed = Activecube::Processor::Composer.new(self)).build_query
     end
 
     def to_sql
@@ -136,5 +142,10 @@ module Activecube::Query
       options.select{|s| s.kind_of? Ordering}
     end
 
+    private
+
+    def clear_sql
+      @composed = nil
+    end
   end
 end

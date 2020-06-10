@@ -7,13 +7,13 @@ require 'activecube/query/measure_nothing'
 module Activecube::Processor
   class Composer
 
-    attr_reader :cube_query, :models
+    attr_reader :cube_query, :models, :query
     def initialize cube_query
       @cube_query = cube_query
     end
 
     def build_query
-      compose_queries optimize! ranked_tables
+      @query = compose_queries optimize! ranked_tables
     end
 
     def connection

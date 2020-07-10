@@ -27,8 +27,8 @@ module Activecube::Processor
 
     private
 
-
     def do_optimize
+
       @tables_by_metrics = []
 
       # sort metrics from low min cost to higher min costs ( by all applicable tables )
@@ -91,13 +91,13 @@ module Activecube::Processor
               else
                 # table to unused table if
                 # cost now > new cost + max other cost in table now
-                old_cost > new_cost + ( prev_step.select.with_index{|c,i| c==c_i && i!=m_i }.max || UNLIM_COST )
+                old_cost > new_cost + ( prev_step.select.with_index{|c,i| c==c_i && i!=m_i }.map{|c| cost_matrix[m_i][c]}.max || UNLIM_COST )
               end
             else
               if new_table_included_times>0
                 # unused table to table if
                 # new cost <  cost now + max other cost in new table
-                old_cost > new_cost - ( prev_step.select{|c| c==c_n }.max || UNLIM_COST )
+                old_cost > new_cost - ( prev_step.select{|c| c==c_n }.map{|c| cost_matrix[m_i][c]}.max || UNLIM_COST )
               else
                 # unused to unused
                 # cost now > new cost
@@ -107,7 +107,7 @@ module Activecube::Processor
 
           }
 
-          step << c_i || new_c_i
+          step << (new_c_i || c_i)
 
         }
 

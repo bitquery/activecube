@@ -41,7 +41,7 @@ module Activecube::Processor
       end
       after = total_cost measure_tables
 
-      raise "Optimizer made it worth #{before} -> #{after} for #{cost_matrix}" unless after <= before
+      raise "Optimizer made it worse #{before} -> #{after} for #{cost_matrix}" unless after <= before
       measure_tables
 
     end

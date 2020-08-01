@@ -2,7 +2,7 @@ module Activecube::Common
 
   module Metrics
 
-    METHODS = [:count, :minimum,:maximum,:average,:sum,:uniqueExact,:unique,:median,:any,:anyLast]
+    METHODS = [:count, :minimum,:maximum,:average,:sum,:uniqueExact,:unique,:median,:medianExact,:any,:anyLast]
 
     METHODS.each do |fname|
 

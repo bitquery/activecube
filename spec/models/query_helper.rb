@@ -2,7 +2,7 @@ module QueryHelper
 
 
   def dict_currency_divider expression
-    "dictGetUInt64('currency', 'divider', toUInt64(#{expression}))"
+    "dictGet('currency', 'divider', toUInt64(#{expression}))"
   end
 
   def unhex_bin string

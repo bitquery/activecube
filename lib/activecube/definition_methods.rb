@@ -52,7 +52,7 @@ module Activecube
 
     include DefinitionMethods
 
-    attr_reader :modifiers
+    attr_reader :modifiers, :tuple
 
     private
 
@@ -60,6 +60,9 @@ module Activecube
       (@modifiers ||= {} )[args.first.to_sym] = Modifier.new( *args)
     end
 
+    def tuple_fields *args
+      @tuple = args
+    end
   end
 
 end

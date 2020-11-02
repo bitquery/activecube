@@ -121,6 +121,12 @@ index ['currency_id'], cardinality: 4
 index ['currency_id','date'], cardinality: 6
 ```
 
+You can require using index in some cases. If required: true added, the table will be used **only** in case when this field is used
+in query metric, dimension or selector.
+```ruby
+index ['currency_id'], cardinality: 4, required: true
+```
+
 ### Query language
 
 You use the cube class to create and execute queries.

@@ -12,7 +12,8 @@ module Activecube::Processor
     end
 
     def matches? query, measures = query.measures
-      (query.column_names(measures)-model.attribute_types.keys).empty?
+      (query.column_names(measures)-model.attribute_types.keys).empty? &&
+          !model.activecube_indexes.detect{|index| !index.matches?(query, measures) }
     end
 
     def measures? measure

@@ -1,6 +1,7 @@
 require 'activecube/query/chain_appender'
 require 'activecube/query/item'
 require 'activecube/query/limit'
+require 'activecube/query/limit_by'
 require 'activecube/query/measure'
 require 'activecube/query/ordering'
 require 'activecube/query/option'
@@ -79,6 +80,12 @@ module Activecube::Query
       args.each{|arg|
         options << Limit.new( arg, :take)
       }
+      self
+    end
+
+    def limit_by *args
+      clear_sql
+      options << LimitBy.new(args)
       self
     end
 

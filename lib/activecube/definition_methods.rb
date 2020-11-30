@@ -31,13 +31,14 @@ module Activecube
 
     include DefinitionMethods
 
-    attr_reader :identity, :fields
+    attr_reader :identity, :identity_expression, :fields
 
     private
 
     def identity_column *args
       raise "Identity already defined as #{identity} for #{self.name}" if @identity
       @identity = args.first
+      @identity_expression = args.second
     end
 
     def field *args

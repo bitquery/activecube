@@ -39,6 +39,7 @@ module Activecube::Query
 
     def try_append_with(query, key, expr)
       expr = Arel.sql(expr) if expr.kind_of?(String)
+      query = query.where(Arel.sql('1')) unless query.respond_to?(:ast)
       if (with = query.ast.with)
         existing = with.expr.detect{|expr| expr.right==key }
         if existing

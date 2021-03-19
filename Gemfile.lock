@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    activecube (0.1.30)
+    activecube (0.1.31)
       activerecord (>= 5.2)
 
 GEM

@@ -22,9 +22,6 @@ module Activecube::Query
       "#{definition.class.name}(#{key})"
     end
 
-
-    private
-
     def append_with! model, cube_query, table, query
 
       if definition.respond_to?(:with_expression) &&
@@ -35,6 +32,10 @@ module Activecube::Query
       end
       query
     end
+
+    private
+
+
 
     def try_append_with(query, key, expr)
       expr = Arel.sql(expr) if expr.kind_of?(String)

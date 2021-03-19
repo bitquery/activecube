@@ -36,6 +36,7 @@ module Activecube::Query
     end
 
     def append_query model, cube_query, table, query
+      query = append_with!(model, cube_query, table, query)
       attr_alias = "`#{key.to_s}`"
       expr = definition.expression model, table, self, cube_query
       query.project expr.as(attr_alias)
@@ -52,6 +53,7 @@ module Activecube::Query
     end
 
     private
+
 
     def modifier_methods!
       definition.class.modifiers.each_pair do |key, modifier|

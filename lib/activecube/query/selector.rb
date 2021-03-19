@@ -32,6 +32,7 @@ module Activecube::Query
       end
 
       def append_query model, cube_query, arel_table, query
+        query = append_with!(model, cube_query, arel_table, query)
         query.where expression(model, arel_table, cube_query)
       end
 

@@ -22,5 +22,35 @@ module Activecube::Query
       "#{definition.class.name}(#{key})"
     end
 
+
+    private
+
+    def append_with! model, cube_query, table, query
+
+      if definition.respond_to?(:with_expression) &&
+        (with_expression = definition.with_expression(model, cube_query, table, query))
+        with_expression.each_pair do |key, expr|
+          query = try_append_with(query, key, expr)
+        end
+      end
+      query
+    end
+
+    def try_append_with(query, key, expr)
+      expr = Arel.sql(expr) if expr.kind_of?(String)
+      if (with = query.ast.with)
+        existing = with.expr.detect{|expr| expr.right==key }
+        if existing
+          raise "Key #{key} defined twice in WITH statement, with different expressions #{expr.to_sql} AND #{existing.left}" if existing.left!=expr.to_s
+          query
+        else
+          query.with(with.expr + [expr.as(key)])
+        end
+      else
+        query.with(expr.as(key))
+      end
+
+    end
+
   end
 end

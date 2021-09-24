@@ -14,7 +14,7 @@ module Activecube
       end
 
       def matches? query, measures
-        !required ||   (fields -  query.column_names(measures)).empty?
+        !required ||   (fields -  query.column_names_required(measures)).empty?
       end
     end
   end

@@ -107,6 +107,10 @@ module Activecube::Query
       (measures + slices + selectors).map(&:required_column_names).flatten.uniq
     end
 
+    def column_names_required measures = self.measures
+      (measures + slices + selectors.select{|s| !s.kind_of?(Selector::CombineSelector)}).map(&:required_column_names).flatten.uniq
+    end
+
     def selector_column_names measures = self.measures
       (measures.map(&:selectors) + slices.map(&:selectors) + selectors).flatten.map(&:required_column_names).flatten.uniq
     end

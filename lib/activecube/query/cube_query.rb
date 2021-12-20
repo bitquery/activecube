@@ -16,7 +16,7 @@ module Activecube::Query
     include ChainAppender
 
     attr_reader :cube, :slices, :measures, :selectors, :options, :tables, :sql
-    attr_accessor :user_agent
+    attr_accessor :stats
 
     def initialize cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil
       @cube = cube
@@ -95,9 +95,6 @@ module Activecube::Query
     def query
       sql = to_query.to_sql
       connection = @composed.connection
-      if user_agent
-        connection.headers = {'User-Agent': user_agent}
-      end
       connection.exec_query(sql)
     end
 

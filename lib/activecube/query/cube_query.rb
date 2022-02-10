@@ -93,10 +93,15 @@ module Activecube::Query
 
 
     def query
-      sql = to_query.to_sql
+      composed_query = to_query
       connection = @composed.connection
-      connection = stats ? stats.proxy(connection) : connection
-      connection.exec_query(sql)
+      if connection.respond_to?(:with_statistics)
+        connection.with_statistics(stats) do
+          connection.exec_query(composed_query.to_sql)
+        end
+      else
+        connection.exec_query(composed_query.to_sql)
+      end
     end
 
     def to_query

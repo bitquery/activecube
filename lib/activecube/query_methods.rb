@@ -13,7 +13,6 @@ module Activecube
 
     def connected_to database: nil, role: nil, &block
       raise Activecube::InputArgumentError, "Must pass block to method" unless block_given?
-      raise "Database not defined" unless database
       super_model.connected_to(database: database, role: role) do
         @database = database
         @role = role

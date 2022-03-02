@@ -124,36 +124,6 @@ module Activecube::Query
       (measures.map(&:selectors) + slices.map(&:selectors) + selectors).flatten.map(&:required_column_names).flatten.uniq
     end
 
-    def reduced other_measures, other_options
-
-      common_selectors = []
-      other_measures.each_with_index do |m,i|
-        if i==0
-          common_selectors += m.selectors
-        else
-          common_selectors &= m.selectors
-        end
-      end
-
-      if common_selectors.empty?
-        reduced_measures = other_measures
-        reduced_selectors = self.selectors
-      else
-        reduced_measures = other_measures.collect{|m|
-          Measure.new m.cube, m.key, m.definition, (m.selectors - common_selectors), m.modifications
-        }
-        reduced_selectors = self.selectors + common_selectors
-      end
-
-      unless reduced_measures.detect{|rm| rm.selectors.empty? }
-        reduced_selectors += [Selector.or(reduced_measures.map(&:selectors).flatten.uniq)]
-      end
-
-      return self if (reduced_measures == self.measures) && (reduced_selectors == self.selectors)
-
-      CubeQuery.new cube, slices, reduced_measures, reduced_selectors, other_options, tables
-    end
-
     def join_fields
       slices.map(&:group_by_columns).flatten.uniq
     end

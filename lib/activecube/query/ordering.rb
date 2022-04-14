@@ -2,15 +2,21 @@ module Activecube
   module Query
     class Ordering
 
-      attr_reader :argument, :direction
-      def initialize argument, direction
+      attr_reader :argument, :direction, :options
+      def initialize argument, direction, options = {}
         @argument = argument
         @direction = direction
+        @options = options
       end
 
       def append_query _model, _cube_query, _table, query
-        text = argument.to_s.split(',').map{|s| quote s}.join(',')
-        query.order(::Arel.sql(text).send(direction))
+        @text = argument.to_s.split(',').map{|s| quote s}.join(',')
+
+        if options[:with_length]
+          return by_length_order(query)
+        end
+
+        simple_order(query)
       end
 
       def quote s
@@ -19,6 +25,21 @@ module Activecube
         else
           s
         end
+      end
+
+      private
+
+      attr_reader :text
+
+      def simple_order(query)
+        query.order(::Arel.sql(text).send(direction))
+      end
+
+      def by_length_order(query)
+        query.order(
+          ::Arel.sql("LENGTH(#{text})").send(direction),
+          ::Arel.sql(text).send(direction)
+        )
       end
 
     end

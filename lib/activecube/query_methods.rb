@@ -5,7 +5,7 @@ module Activecube
 
     attr_reader :database, :role
 
-    [:slice, :measure, :when, :desc, :asc, :limit, :offset].each do |method|
+    [:slice, :measure, :when, :desc, :desc_by_integer, :asc, :asc_by_integer, :limit, :offset].each do |method|
       define_method(method) do |*args|
         Query::CubeQuery.new(self).send method, *args
       end

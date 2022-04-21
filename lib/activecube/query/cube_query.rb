@@ -61,10 +61,26 @@ module Activecube::Query
       self
     end
 
+    def desc_by_integer *args
+      clear_sql
+      args.each{|arg|
+        options << Ordering.new(arg, :desc, options = {with_length: true})
+      }
+      self
+    end
+
     def asc *args
       clear_sql
       args.each{|arg|
         options << Ordering.new( arg, :asc)
+      }
+      self
+    end
+
+    def asc_by_integer *args
+      clear_sql
+      args.each{|arg|
+        options << Ordering.new(arg, :asc, options = {with_length: true})
       }
       self
     end

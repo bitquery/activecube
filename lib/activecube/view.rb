@@ -22,7 +22,7 @@ module Activecube
       true
     end
 
-    def query _cube_query
+    def query _cube_query, measures = _cube_query.measures
       raise "query method have to be implemented in #{name}"
     end
 

@@ -20,12 +20,12 @@ module Activecube::Processor
       (measure.required_column_names - model.attribute_types.keys).empty?
     end
 
-    def query cube_query
+    def query cube_query, measures
 
       table = model.arel_table
       query = table
 
-      (cube_query.slices + cube_query.measures + cube_query.selectors + cube_query.options).each do |s|
+      (cube_query.slices + measures + cube_query.selectors + cube_query.options).each do |s|
         query = s.append_query model, cube_query, table, query
       end
 

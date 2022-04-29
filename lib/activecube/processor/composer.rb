@@ -74,9 +74,8 @@ module Activecube::Processor
       @models = []
       measures_by_tables = measure_tables.group_by(&:table)
       measures_by_tables.each_pair do |table, list|
-        measures = list.map { |l| l.measure }
         @models << table.model
-        table_query = table.query cube_query, measures
+        table_query = table.query cube_query, list.map(&:measure)
         composed_query = composed_query ? table.join(cube_query, composed_query, table_query) : table_query
       end
       composed_query

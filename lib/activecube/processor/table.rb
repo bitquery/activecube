@@ -20,7 +20,7 @@ module Activecube::Processor
       (measure.required_column_names - model.attribute_types.keys).empty?
     end
 
-    def query cube_query, measures
+    def query cube_query, measures = cube_query.measures
 
       table = model.arel_table
       query = table

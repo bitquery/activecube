@@ -105,7 +105,7 @@ module Activecube::Processor
 
         unless flag
           rows_indices[i] = uniq_rows.length
-          possible_tables[i] = Hash[row.map.with_index { |c, index| [index, true] if c }.compact]
+          possible_tables[uniq_rows.length] = Hash[row.map.with_index { |c, index| [index, true] if c }.compact]
           uniq_rows.push(row)
         end
       end

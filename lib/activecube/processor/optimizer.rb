@@ -67,8 +67,7 @@ module Activecube::Processor
     end
 
     def gen_permutations(n, k)
-      seq = *(0...n)
-      perm = seq.slice(0, k)
+      perm = Array.new(k, 0)
       perms = []
 
       while true

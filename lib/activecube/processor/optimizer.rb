@@ -93,6 +93,7 @@ module Activecube::Processor
       # reduce size of cost_matrix deleting duplicates
       uniq_rows = []
       rows_indices = {}
+      possible_tables = {}
       cost_matrix.each_with_index do |row, i|
         flag = false
 
@@ -105,12 +106,18 @@ module Activecube::Processor
 
         unless flag
           rows_indices[i] = uniq_rows.length
+          possible_tables[i] = Hash[row.map.with_index { |c, index| [index, true] if c }.compact]
           uniq_rows.push(row)
         end
       end
 
       # generating variants for reduced matrix
       vars = gen_permutations(tables_count, uniq_rows.length)
+
+      # filter possible variants
+      vars =  vars.filter do |v|
+        v.map.with_index.all? {|t_n, i| possible_tables[i][t_n]}
+      end
 
       # restore variants for full matrix
       vars.map do |variant|

@@ -7,6 +7,7 @@ module Activecube::Query
         'eq' => 'in',
         'not_eq' => 'not_in'
     }
+    INDEX_OPERATORS = ['eq', 'in']
 
     class CombineSelector < Selector
 
@@ -140,6 +141,10 @@ module Activecube::Query
 
     def to_s
       "Selector #{super}"
+    end
+
+    def is_indexed?
+      INDEX_OPERATORS.include? self.operator.operation
     end
 
     def self.or(selectors)

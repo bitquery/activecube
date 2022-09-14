@@ -144,7 +144,7 @@ module Activecube::Query
     end
 
     def is_indexed?
-      INDEX_OPERATORS.include? self.operator.operation
+      INDEX_OPERATORS.include? self.operator&.operation
     end
 
     def self.or(selectors)

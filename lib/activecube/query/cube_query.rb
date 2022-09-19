@@ -137,7 +137,7 @@ module Activecube::Query
     end
 
     def selector_column_names measures = self.measures
-      (measures.map(&:selectors) + slices.map(&:selectors) + selectors).flatten.select(&:is_indexed?).map(&:required_column_names).flatten.uniq
+      (measures.map(&:selectors) + slices.map(&:selectors) + selectors).flatten.map(&:required_column_names).flatten.uniq
     end
 
     def join_fields

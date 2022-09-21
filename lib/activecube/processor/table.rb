@@ -38,8 +38,11 @@ module Activecube::Processor
 
       dimension_names = (cube_query.join_fields + cube_query.slices.map{|s| s.key} ).uniq
 
-      query = outer_table.from(left_query).
-          join(right_query, ::Arel::Nodes::FullOuterJoin).
+      left_query_copy = left_query.deep_dup.remove_options
+      right_query_copy = right_query.deep_dup.remove_options
+
+      query = outer_table.from(left_query_copy).
+          join(right_query_copy, ::Arel::Nodes::FullOuterJoin).
           using(*dimension_names)
 
       cube_query.options.each do |option|

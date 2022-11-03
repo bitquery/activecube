@@ -1,31 +1,31 @@
 module Activecube
   class Field
-
     attr_reader :name, :definition
 
-    def self.build name, arg
-      if arg.kind_of? String
+    def self.build(name, arg)
+      if arg.is_a? String
         Field.new name, arg
-      elsif arg.kind_of? Hash
+      elsif arg.is_a? Hash
         Field.new name, arg.symbolize_keys
-      elsif arg.kind_of?(Class) && arg < Field
+      elsif arg.is_a?(Class) && arg < Field
         arg.new name
       else
         raise Activecube::InputArgumentError, "Unexpected field #{name} definition with #{arg.class.name}"
       end
     end
 
-    def initialize name, arg = nil
+    def initialize(name, arg = nil)
       @name = name
       @definition = arg
     end
 
-    def expression _model, _arel_table, _slice, _cube_query
-      raise Activecube::InputArgumentError, "String expression expected for #{name} field, instead #{definition.class.name} is found" unless definition.kind_of?(String)
+    def expression(_model, _arel_table, _slice, _cube_query)
+      unless definition.is_a?(String)
+        raise Activecube::InputArgumentError,
+              "String expression expected for #{name} field, instead #{definition.class.name} is found"
+      end
+
       definition
     end
-
   end
-
-
 end

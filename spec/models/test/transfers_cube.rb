@@ -1,6 +1,5 @@
 module Test
   class TransfersCube < Activecube::Base
-
     table TransfersCurrency
     table TransfersFrom
     table TransfersTo
@@ -15,6 +14,5 @@ module Test
              transfer_from: TransferFromSelector,
              transfer_to: TransferToSelector,
              date: DateSelector
-
   end
 end

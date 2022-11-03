@@ -1,10 +1,10 @@
 module Activecube::Query
   class Item
-
     include ChainAppender
 
     attr_reader :cube, :key, :definition
-    def initialize cube, key, definition
+
+    def initialize(cube, key, definition)
       @key = key
       @cube = cube
       @definition = definition
@@ -14,7 +14,7 @@ module Activecube::Query
       definition.class.column_names || []
     end
 
-    def alias! new_key
+    def alias!(new_key)
       self.class.new cube, new_key, definition
     end
 
@@ -22,10 +22,9 @@ module Activecube::Query
       "#{definition.class.name}(#{key})"
     end
 
-    def append_with! model, cube_query, table, query
-
+    def append_with!(model, cube_query, table, query)
       if definition.respond_to?(:with_expression) &&
-        (with_expression = definition.with_expression(model, cube_query, table, query))
+         (with_expression = definition.with_expression(model, cube_query, table, query))
         with_expression.each_pair do |key, expr|
           query = try_append_with(query, key, expr)
         end
@@ -35,15 +34,16 @@ module Activecube::Query
 
     private
 
-
-
     def try_append_with(query, key, expr)
-      expr = Arel.sql(expr) if expr.kind_of?(String)
+      expr = Arel.sql(expr) if expr.is_a?(String)
       query = query.where(Arel.sql('1')) unless query.respond_to?(:ast)
       if (with = query.ast.with)
-        existing = with.expr.detect{|expr| expr.right==key }
+        existing = with.expr.detect { |expr| expr.right == key }
         if existing
-          raise "Key #{key} defined twice in WITH statement, with different expressions #{expr.to_sql} AND #{existing.left}" if existing.left!=expr.to_s
+          if existing.left != expr.to_s
+            raise "Key #{key} defined twice in WITH statement, with different expressions #{expr.to_sql} AND #{existing.left}"
+          end
+
           query
         else
           query.with(with.expr + [expr.as(key)])
@@ -51,8 +51,6 @@ module Activecube::Query
       else
         query.with(expr.as(key))
       end
-
     end
-
   end
 end

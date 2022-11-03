@@ -12,22 +12,21 @@ require 'activecube/processor/composer'
 
 module Activecube::Query
   class CubeQuery
-
     include ChainAppender
 
     attr_reader :cube, :slices, :measures, :selectors, :options, :tables, :sql
     attr_accessor :stats
 
-    def initialize cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil
+    def initialize(cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil)
       @cube = cube
       @slices = slices
       @measures = measures
       @selectors = selectors
       @options = options
 
-      @tables = model_tables || cube.models.map{|m|
+      @tables = model_tables || cube.models.map do |m|
         m < Activecube::View ? m.new : Activecube::Processor::Table.new(m)
-      }
+      end
 
       cube.options && cube.options.each do |option|
         define_singleton_method option.to_s.underscore do |*args|
@@ -35,78 +34,76 @@ module Activecube::Query
           self
         end
       end
-
     end
 
-    def slice *args
+    def slice(*args)
       clear_sql
-      append *args, @slices, Slice, cube.dimensions
+      append(*args, @slices, Slice, cube.dimensions)
     end
 
-    def measure *args
+    def measure(*args)
       clear_sql
-      append *args, @measures, Measure, cube.metrics
+      append(*args, @measures, Measure, cube.metrics)
     end
 
-    def when *args
+    def when(*args)
       clear_sql
-      append *args, @selectors, Selector, cube.selectors
+      append(*args, @selectors, Selector, cube.selectors)
     end
 
-    def desc *args
+    def desc(*args)
       clear_sql
-      args.each{|arg|
+      args.each do |arg|
         options << Ordering.new(arg, :desc)
-      }
+      end
       self
     end
 
-    def desc_by_integer *args
+    def desc_by_integer(*args)
       clear_sql
-      args.each{|arg|
-        options << Ordering.new(arg, :desc, options = {with_length: true})
-      }
+      args.each do |arg|
+        options << Ordering.new(arg, :desc, options = { with_length: true })
+      end
       self
     end
 
-    def asc *args
+    def asc(*args)
       clear_sql
-      args.each{|arg|
-        options << Ordering.new( arg, :asc)
-      }
+      args.each do |arg|
+        options << Ordering.new(arg, :asc)
+      end
       self
     end
 
-    def asc_by_integer *args
+    def asc_by_integer(*args)
       clear_sql
-      args.each{|arg|
-        options << Ordering.new(arg, :asc, options = {with_length: true})
-      }
+      args.each do |arg|
+        options << Ordering.new(arg, :asc, options = { with_length: true })
+      end
       self
     end
 
-    def offset *args
+    def offset(*args)
       clear_sql
-      args.each{|arg|
-        options << Limit.new( arg, :skip)
-      }
+      args.each do |arg|
+        options << Limit.new(arg, :skip)
+      end
       self
     end
 
-    def limit *args
+    def limit(*args)
       clear_sql
-      args.each{|arg|
-        options << Limit.new( arg, :take)
-      }
+      args.each do |arg|
+        options << Limit.new(arg, :take)
+      end
       self
     end
 
-    def limit_by *args
+    def limit_by(*args)
       clear_sql
       options << LimitBy.new(args)
       self
     end
-
 
     def query
       composed_query = to_query
@@ -128,15 +125,17 @@ module Activecube::Query
       to_query.to_sql
     end
 
-    def column_names measures = self.measures
+    def column_names(measures = self.measures)
       (measures + slices + selectors).map(&:required_column_names).flatten.uniq
     end
 
-    def column_names_required measures = self.measures
-      (measures + slices + selectors.select{|s| !s.kind_of?(Selector::CombineSelector)}).map(&:required_column_names).flatten.uniq
+    def column_names_required(measures = self.measures)
+      (measures + slices + selectors.select do |s|
+                             !s.is_a?(Selector::CombineSelector)
+                           end).map(&:required_column_names).flatten.uniq
     end
 
-    def selector_column_names measures = self.measures
+    def selector_column_names(measures = self.measures)
       (measures.map(&:selectors) + slices.map(&:selectors) + selectors).flatten.select(&:is_indexed?).map(&:required_column_names).flatten.uniq
     end
 
@@ -145,7 +144,7 @@ module Activecube::Query
     end
 
     def orderings
-      options.select{|s| s.kind_of? Ordering}
+      options.select { |s| s.is_a? Ordering }
     end
 
     private

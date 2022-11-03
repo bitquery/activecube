@@ -3,7 +3,6 @@
 class CreateTransfersCurrencyTable < ActiveRecord::Migration[5.0]
   def up
     create_table :transfers_currency do |t|
-
       t.date :tx_date
       t.datetime :tx_time
 
@@ -14,12 +13,8 @@ class CreateTransfersCurrencyTable < ActiveRecord::Migration[5.0]
       t.integer :currency_id
 
       t.float :value
-
     end
 
     Test::TransfersCurrency.reset_column_information
-
   end
-
 end
-

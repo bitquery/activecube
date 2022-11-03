@@ -1,6 +1,5 @@
 module Dimension
   class Date < Activecube::Dimension
-
     DEFAULT_FORMAT = '%Y-%m-%d'
 
     column 'tx_date'
@@ -12,36 +11,31 @@ module Dimension
 
     field 'date', DateField
 
-    field 'date_inline', ( Class.new(Activecube::Field) do
-
-      def format string
+    field 'date_inline', (Class.new(Activecube::Field) do
+      def format(string)
         @format = string
       end
 
-      def expression _model, _arel_table, _slice, _cube_query
-        "formatDateTime(tx_date,'#{ @format || DEFAULT_FORMAT  }')"
+      def expression(_model, _arel_table, _slice, _cube_query)
+        "formatDateTime(tx_date,'#{@format || DEFAULT_FORMAT}')"
       end
-
-    end )
+    end)
 
     field 'day', {
-        year: {
-            number: 'toYear(tx_date)'
-        },
-        date: {
-            formatted: ( Class.new(Activecube::Field) do
+      year: {
+        number: 'toYear(tx_date)'
+      },
+      date: {
+        formatted: (Class.new(Activecube::Field) do
+          def format(string)
+            @format = string
+          end
 
-              def format string
-                @format = string
-              end
-
-              def expression _model, _arel_table, _slice, _cube_query
-                "formatDateTime(tx_date,'#{ @format || DEFAULT_FORMAT  }')"
-              end
-
-            end )
-        }
+          def expression(_model, _arel_table, _slice, _cube_query)
+            "formatDateTime(tx_date,'#{@format || DEFAULT_FORMAT}')"
+          end
+        end)
+      }
     }
-
   end
 end

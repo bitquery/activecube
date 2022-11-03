@@ -1,4 +1,4 @@
-require "activecube/version"
+require 'activecube/version'
 require 'activecube/active_record_extension'
 
 require 'activecube/input_argument_error'
@@ -13,8 +13,6 @@ require 'activecube/common/metrics'
 require 'active_record'
 
 module Activecube
-
   # include the extension
-  ActiveRecord::Base.send(:include, Activecube::ActiveRecordExtension)
-
+  ActiveRecord::Base.include Activecube::ActiveRecordExtension
 end

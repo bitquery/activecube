@@ -1,10 +1,10 @@
 module Activecube
   module Processor
     class MeasureTables
-
       class Entry
         attr_reader :table, :index, :cardinality, :cost
-        def initialize table, index
+
+        def initialize(table, index)
           @table = table
           @index = index
           @cardinality = index ? index.cardinality : 0
@@ -15,15 +15,14 @@ module Activecube
       attr_reader :measure, :entries, :tables
       attr_accessor :selected
 
-      def initialize measure
+      def initialize(measure)
         @measure = measure
         @tables = {}
         @entries = []
         @selected = 0
       end
 
-
-      def add_table table, index
+      def add_table(table, index)
         e = Entry.new(table, index)
         entries << e
         tables[table] = e
@@ -36,7 +35,6 @@ module Activecube
       def entry
         entries[selected]
       end
-
     end
   end
 end

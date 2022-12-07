@@ -6,9 +6,9 @@ require 'activecube/query/measure_nothing'
 
 module Activecube::Processor
   class Composer
-
     attr_reader :cube_query, :models, :query
-    def initialize cube_query
+
+    def initialize(cube_query)
       @cube_query = cube_query
     end
 
@@ -18,21 +18,27 @@ module Activecube::Processor
 
     def connection
       connections = models.map(&:connection).compact.uniq
-      raise "No connection found for query" if connections.empty?
-      raise "Tables #{models.map(&:name).join(',')} mapped to multiple connections, can not query" if connections.count>1
+      # for views
+      if connections.empty? && !models.empty?
+        connections = models.first&.models&.map(&:connection)&.compact&.uniq || []
+      end
+      raise 'No connection found for query' if connections.empty?
+      if connections.count > 1
+        raise "Tables #{models.map(&:name).join(',')} mapped to multiple connections, can not query"
+      end
+
       connections.first
     end
 
     private
 
-    def optimize! measure_tables
-
+    def optimize!(measure_tables)
       all_tables = measure_tables.map(&:tables).map(&:keys).flatten.uniq
 
       cost_matrix = measure_tables.collect do |measure_table|
-        all_tables.collect{|table|
+        all_tables.collect do |table|
           measure_table.tables[table].try(&:cost)
-        }
+        end
       end
 
       before = total_cost measure_tables
@@ -42,35 +48,41 @@ module Activecube::Processor
       after = total_cost measure_tables
 
       raise "Optimizer made it worse #{before} -> #{after} for #{cost_matrix}" unless after <= before
-      measure_tables
 
+      measure_tables
     end
 
-    def total_cost measure_tables
-      measure_tables.group_by(&:table).collect{|t| t.second.map(&:entry).map(&:cost).max }.sum
+    def total_cost(measure_tables)
+      measure_tables.group_by(&:table).collect { |t| t.second.map(&:entry).map(&:cost).max }.sum
     end
 
     def ranked_tables
-      tables = cube_query.tables.select{|table| table.matches? cube_query, []}
-      measures = cube_query.measures.empty? ?
-                     [Activecube::Query::MeasureNothing.new(cube_query.cube)] :
-                     cube_query.measures
+      tables = cube_query.tables.select { |table| table.matches? cube_query, [] }
+      measures = if cube_query.measures.empty?
+                   [Activecube::Query::MeasureNothing.new(cube_query.cube)]
+                 else
+                   cube_query.measures
+                 end
       measures.collect do |measure|
         by = MeasureTables.new measure
-        tables.each{|table|
+        tables.each do |table|
           next unless table.measures? measure
-          max_cardinality_index = table.model.activecube_indexes.select{|index|
+
+          max_cardinality_index = table.model.activecube_indexes.select do |index|
             index.indexes? cube_query, [measure]
-          }.sort_by(&:cardinality).last
+          end.sort_by(&:cardinality).last
           by.add_table table, max_cardinality_index
-        }
-        raise "Metric #{measure.key} #{measure.definition.try(:name) || measure.class.name} can not be measured by any of tables #{tables.map(&:name).join(',')}" if by.tables.empty?
+        end
+        if by.tables.empty?
+          raise "Metric #{measure.key} #{measure.definition.try(:name) || measure.class.name} can not be measured by any of tables #{tables.map(&:name).join(',')}"
+        end
+
         by
       end
     end
 
-    def compose_queries measure_tables
-      composed_query  = nil
+    def compose_queries(measure_tables)
+      composed_query = nil
       @models = []
       measures_by_tables = measure_tables.group_by(&:table)
       measures_by_tables.each_pair do |table, list|
@@ -80,6 +92,5 @@ module Activecube::Processor
       end
       composed_query
     end
-
   end
 end

@@ -9,6 +9,7 @@ module Activecube::Query
     INDEX_OPERATORS = %w[eq in]
 
     class CombineSelector < Selector
+      attr_reader :selectors
       def initialize(selectors, operator)
         @selectors = selectors
         @operator = operator

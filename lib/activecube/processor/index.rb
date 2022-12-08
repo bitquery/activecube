@@ -1,16 +1,18 @@
 module Activecube
   module Processor
     class Index
-      attr_reader :fields, :cardinality, :required
+      attr_reader :fields, :cardinality, :required, :indexes
 
       def initialize(name, *args)
         @fields = [name].flatten
         @cardinality = args.first && args.first[:cardinality]
         @required = args.first && args.first[:required]
+        # if true this index will definitely be used
+        @indexes = args.first && args.first[:indexes]
       end
 
       def indexes?(query, measures)
-        (fields - query.selector_column_names(measures)).empty?
+        indexes || (fields - query.selector_column_names(measures)).empty?
       end
 
       def matches?(query, measures)

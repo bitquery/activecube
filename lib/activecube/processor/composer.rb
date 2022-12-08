@@ -18,6 +18,10 @@ module Activecube::Processor
 
     def connection
       connections = models.map(&:connection).compact.uniq
+      # for views
+      if connections.empty? && !models.empty?
+        connections = models.first&.models&.map(&:connection)&.compact&.uniq || []
+      end
       raise 'No connection found for query' if connections.empty?
       if connections.count > 1
         raise "Tables #{models.map(&:name).join(',')} mapped to multiple connections, can not query"

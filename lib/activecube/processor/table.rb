@@ -39,8 +39,13 @@ module Activecube::Processor
       right_query_copy = right_query.deep_dup.remove_options
 
       query = outer_table.from(left_query_copy)
-                         .join(right_query_copy, ::Arel::Nodes::FullOuterJoin)
-                         .using(*dimension_names)
+
+      query = if dimension_names.empty?
+                query.cross_join(right_query_copy)
+              else
+                query.join(right_query_copy, ::Arel::Nodes::FullOuterJoin)
+                     .using(*dimension_names)
+              end
 
       cube_query.options.each do |option|
         query = option.append_query model, cube_query, outer_table, query

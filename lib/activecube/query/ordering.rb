@@ -9,8 +9,25 @@ module Activecube
         @options = options
       end
 
-      def append_query(_model, _cube_query, _table, query)
-        @text = argument.to_s.split(',').map { |s| quote s }.join(',')
+      def append_query(_model, cube_query, _table, query)
+        allowed_sort_keys = (cube_query.measures + cube_query.slices).to_h { |k| [k.key, true] }
+
+        sort_keys = []
+        # allow ordering like desc: "key1,key2" for backward compatibility
+        argument.to_s.delete(' ').split(',').each do |s|
+          prefixed_s = Activecube::Graphql::ParseTree::Element::KEY_FIELD_PREFIX + s
+
+          if allowed_sort_keys[s]
+            sort_keys << quote(s)
+          elsif allowed_sort_keys[prefixed_s]
+            sort_keys << quote(prefixed_s)
+          else
+            key_wo_prefix = s.delete_prefix(Activecube::Graphql::ParseTree::Element::KEY_FIELD_PREFIX)
+            raise GraphqlError::ArgumentError, "Can't use #{key_wo_prefix} in sorting. Missing field #{key_wo_prefix} in executed query"
+          end
+        end
+
+        @text = sort_keys.join(',')
 
         return by_length_order(query) if options[:with_length]
 

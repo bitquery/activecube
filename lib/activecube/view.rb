@@ -29,5 +29,14 @@ module Activecube
     def join(_cube_query, _left_query, _right_query)
       raise "join method have to be implemented in #{name}"
     end
+
+    private
+
+    def query_with_group_by?(measures)
+      # that means if there are no measures in the query, we don't need to group by.
+      return false if measures.first.is_a?(Activecube::Query::MeasureNothing)
+
+      true
+    end
   end
 end

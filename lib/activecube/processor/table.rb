@@ -23,7 +23,12 @@ module Activecube::Processor
       table = model.arel_table
       query = table
 
-      (cube_query.slices + measures + cube_query.selectors + cube_query.options).each do |s|
+      cube_query.slices.each do |s|
+        s.query_with_group_by = query_with_group_by?(measures)
+        query = s.append_query model, cube_query, table, query
+      end
+
+      (measures + cube_query.selectors + cube_query.options).each do |s|
         query = s.append_query model, cube_query, table, query
       end
 
@@ -52,6 +57,15 @@ module Activecube::Processor
       end
 
       query
+    end
+
+    private
+
+    def query_with_group_by?(measures)
+      # that means if there are no measures in the query, we don't need to group by.
+      return false if measures.first.is_a?(Activecube::Query::MeasureNothing)
+
+      true
     end
   end
 end

@@ -1,6 +1,7 @@
 module Activecube::Query
   class Slice < Item
     attr_reader :dimension, :parent, :selectors
+    attr_accessor :query_with_group_by
 
     def initialize(cube, key, definition, parent = nil, selectors = [])
       super cube, key, definition
@@ -78,9 +79,9 @@ module Activecube::Query
 
           query = query.project(node) unless query.projections.include?(node)
 
-          query = query.group(expr ? column : table[column])
+          query = query.group(expr ? column : table[column]) if query_with_group_by
         end
-      else
+      elsif query_with_group_by
         query = query.group(attr_alias)
       end
 

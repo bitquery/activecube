@@ -23,8 +23,10 @@ module Activecube::Processor
       table = model.arel_table
       query = table
 
+      with_group_by = query_with_group_by?(measures)
+
       cube_query.slices.each do |s|
-        s.query_with_group_by = query_with_group_by?(measures)
+        s.query_with_group_by = with_group_by
         query = s.append_query model, cube_query, table, query
       end
 

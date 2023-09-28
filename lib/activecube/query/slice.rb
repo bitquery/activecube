@@ -1,3 +1,5 @@
+require 'activecube/processor/template'
+
 module Activecube::Query
   class Slice < Item
     attr_reader :dimension, :parent, :selectors
@@ -60,11 +62,11 @@ module Activecube::Query
       query = append_with!(model, cube_query, table, query)
 
       attr_alias = "`#{key}`"
-      expr = if parent || definition.respond_to?(:expression)
-               Arel.sql(definition.expression(model, table, self, cube_query))
-             else
-               table[dimension.class.column_name]
-             end
+      expr = expression(model, table, self, cube_query)
+
+      if parent || definition.respond_to?(:expression)
+        expr = process_templates(expr)
+      end
 
       query = query.project(expr.as(attr_alias))
 
@@ -94,6 +96,17 @@ module Activecube::Query
       query
     end
 
+    def process_templates(text)
+      template = Activecube::Processor::Template.new(text)
+      return text unless template.template_specified?
+
+      if query_with_group_by
+        return template.apply_template('any')
+      end
+
+      template.apply_template('empty')
+    end
+
     def to_s
       parent ? "Dimension #{dimension}[#{super}]" : "Dimension #{super}"
     end
@@ -108,6 +121,16 @@ module Activecube::Query
           self
         end
       end
+    end
+
+    private
+
+    def expression(model, arel_table, slice, cube_query)
+      if parent || definition.respond_to?(:expression)
+         Arel.sql(definition.expression(model, arel_table, slice, cube_query))
+       else
+         arel_table[dimension.class.column_name]
+       end
     end
   end
 end

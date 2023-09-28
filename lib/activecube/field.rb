@@ -1,6 +1,6 @@
 module Activecube
   class Field
-    attr_reader :name, :definition
+    attr_accessor :name, :definition
 
     def self.build(name, arg)
       if arg.is_a? String

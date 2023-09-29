@@ -2,12 +2,13 @@ require 'activecube/processor/template'
 
 module Activecube::Query
   class Slice < Item
-    attr_reader :dimension, :parent, :selectors
-    attr_accessor :query_with_group_by
+    attr_reader :dimension, :dimension_include_group_by, :parent, :selectors
+    attr_accessor :include_group_by
 
     def initialize(cube, key, definition, parent = nil, selectors = [])
       super cube, key, definition
       @dimension = parent ? parent.dimension : definition
+      @dimension_include_group_by = dimension.class.include_group_by
       @parent = parent
 
       @selectors = selectors
@@ -81,9 +82,9 @@ module Activecube::Query
 
           query = query.project(node) unless query.projections.include?(node)
 
-          query = query.group(expr ? column : table[column]) if query_with_group_by
+          query = query.group(expr ? column : table[column]) if include_group_by
         end
-      elsif query_with_group_by
+      elsif include_group_by
         query = query.group(attr_alias)
       end
 
@@ -100,9 +101,7 @@ module Activecube::Query
       template = Activecube::Processor::Template.new(text)
       return text unless template.template_specified?
 
-      if query_with_group_by
-        return template.apply_template('any')
-      end
+      return template.apply_template('any') if include_group_by
 
       template.apply_template('empty')
     end

@@ -29,6 +29,7 @@ module Activecube
     include DefinitionMethods
 
     attr_reader :identity, :identity_expression, :fields
+    attr_accessor :include_group_by
 
     private
 
@@ -37,6 +38,10 @@ module Activecube
 
       @identity = args.first
       @identity_expression = args.second
+    end
+
+    def set_include_group_by
+      @include_group_by = true
     end
 
     def field(*args)

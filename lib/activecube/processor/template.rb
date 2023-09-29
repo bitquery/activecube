@@ -8,7 +8,7 @@ module Activecube
     class Template
       attr_reader :text
 
-      TEMPLATE_REGEXP = /{{([^%]+)}}/.freeze
+      TEMPLATE_REGEXP = /{{([^}]+)}}/.freeze
       TEMPLATE_METHODS_LIST = {
         empty: '{{template}}',
         any: 'any({{template}})'
@@ -41,7 +41,7 @@ module Activecube
       end
 
       def replace_text_templates(replaced_templates)
-        text.gsub(/{{[^%]+}}/).with_index do |_, i|
+        text.gsub(/{{[^}]+}}/).with_index do |_, i|
           replaced_templates[i]
         end
       end

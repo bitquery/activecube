@@ -40,8 +40,8 @@ module Activecube
       @identity_expression = args.second
     end
 
-    def set_include_group_by
-      @include_group_by = true
+    def always_include_group_by(val_bool)
+      @include_group_by = val_bool
     end
 
     def field(*args)

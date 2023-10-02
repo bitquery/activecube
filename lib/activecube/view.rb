@@ -32,7 +32,11 @@ module Activecube
 
     private
 
-    def query_with_group_by?(measures)
+    def dimension_include_group_by?(slice)
+      slice.dimension_include_group_by
+    end
+
+    def any_metrics_specified?(measures)
       # that means if there are no measures in the query, we don't need to group by.
       return false if measures.first.is_a?(Activecube::Query::MeasureNothing)
 

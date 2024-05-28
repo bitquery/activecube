@@ -36,6 +36,12 @@ module Activecube::Query
       end
     end
 
+    def group_by(*args)
+      clear_sql
+      @options << Option.new(:group_by, *args)
+      self
+    end
+
     def slice(*args)
       clear_sql
       append(*args, @slices, Slice, cube.dimensions)

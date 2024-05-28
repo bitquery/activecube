@@ -19,13 +19,17 @@ module Activecube::Processor
       (measure.required_column_names - model.attribute_types.keys).empty?
     end
 
+    def use_group_by?(cube_query)
+      !cube_query.options.detect{|op| op.argument == :group_by && op.value == false}
+    end
+
     def query(cube_query, measures = cube_query.measures)
       table = model.arel_table
       query = table
 
       # Handle slices
       cube_query.slices.each do |s|
-        with_group_by = dimension_include_group_by?(s) || any_metrics_specified?(measures)
+        with_group_by = use_group_by?(cube_query) && (dimension_include_group_by?(s) || any_metrics_specified?(measures))
 
         s.include_group_by = with_group_by
         query = s.append_query(model, cube_query, table, query)

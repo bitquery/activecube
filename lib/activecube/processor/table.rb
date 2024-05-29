@@ -20,7 +20,7 @@ module Activecube::Processor
     end
 
     def use_group_by?(cube_query)
-      !cube_query.options.detect{|op| op.argument == :group_by && op.value == false}
+      !cube_query.options.detect{|op| op.try(:argument) && op.argument == :group_by && op.value == false}
     end
 
     def query(cube_query, measures = cube_query.measures)

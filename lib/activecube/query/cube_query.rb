@@ -15,7 +15,7 @@ module Activecube::Query
     include ChainAppender
 
     attr_reader :cube, :slices, :measures, :selectors, :options, :tables, :sql
-    attr_accessor :stats
+    attr_accessor :stats, :headers
 
     def initialize(cube, slices = [], measures = [], selectors = [], options = [], model_tables = nil)
       @cube = cube
@@ -115,7 +115,7 @@ module Activecube::Query
       composed_query = to_query
       connection = @composed.connection
       if connection.respond_to?(:with_statistics)
-        connection.with_statistics(stats) do
+        connection.with_statistics(stats, headers) do
           connection.exec_query(composed_query.to_sql)
         end
       else

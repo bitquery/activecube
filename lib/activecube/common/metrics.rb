@@ -1,6 +1,6 @@
 module Activecube::Common
   module Metrics
-    METHODS = %i[count minimum maximum average sum uniqueExact unique median medianExact any anyLast]
+    METHODS = %i[count minimum maximum average sum uniqueExact unique median medianExact any anyLast stddevPop varPop entropy skewPop kurtPop]
 
     METHODS.each do |fname|
       if fname == :count
